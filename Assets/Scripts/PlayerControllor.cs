@@ -18,6 +18,7 @@ public class PlayerControllor : MonoBehaviour
 	private Vector2 smoothV;
 
 	public float WalkSpeed;
+	public float RunSpeed;
 	public float CurrentSpeed { get; private set; }
 
 	void Start()
@@ -78,10 +79,10 @@ public class PlayerControllor : MonoBehaviour
 		characterController.Move(tmp_Movement);
 
 
-		//Debug.Log(characterController.velocity.magnitude);
+		Debug.Log(characterController.velocity.magnitude);
 
 		Velocity = characterController.velocity.magnitude;
-		characterAnimator.SetFloat("Velocity", Velocity);
+		characterAnimator.SetFloat("Velocity", Velocity, 0.25f, Time.deltaTime);
 	}
 
 	private void HandleMouseMove(Vector3 vec)
