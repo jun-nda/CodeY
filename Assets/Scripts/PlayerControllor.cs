@@ -4,6 +4,8 @@ using UnityEngine;
 public class PlayerControllor : MonoBehaviour
 {
 	private CharacterController characterController;
+	private Animator characterAnimator;
+	private float Velocity;
 
 	[SerializeField] private Camera camera;
 	public float sensitivity = 5.0f;
@@ -20,6 +22,7 @@ public class PlayerControllor : MonoBehaviour
 
 	void Start()
 	{
+		characterAnimator = GetComponentInChildren<Animator>();
 		characterController = GetComponent<CharacterController>();
 		Cursor.lockState = CursorLockMode.Locked;
 	}
@@ -73,6 +76,12 @@ public class PlayerControllor : MonoBehaviour
 		movementDirection.y -= gravity * Time.deltaTime;
 		var tmp_Movement = CurrentSpeed * movementDirection;
 		characterController.Move(tmp_Movement);
+
+
+		//Debug.Log(characterController.velocity.magnitude);
+
+		Velocity = characterController.velocity.magnitude;
+		characterAnimator.SetFloat("Velocity", Velocity);
 	}
 
 	private void HandleMouseMove(Vector3 vec)
