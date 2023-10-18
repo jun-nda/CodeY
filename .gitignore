@@ -60,3 +60,9 @@ assetsstreamingassetsaa
 .DS_Store
 Thumbs.db
 Desktop.ini
+Assembly-CSharp-Editor.csproj
+Assembly-CSharp.csproj
+CodeY.sln
+ProjectSettings/EditorBuildSettings.asset
+ProjectSettings/EditorSettings.asset
+UniEvent.csproj
