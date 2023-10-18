@@ -6,14 +6,16 @@ public class MainPanel : PanelBase
 {
 	void Start( )
 	{
-		EventManager.Notify("fpsLock", true);
 		Debug.Log("Start!!!!!");
+
+		EventManager.Notify("fpsLock", true);
 	}
 
 	public void OnClickCloseButton( )
 	{
-		EventManager.Notify("fpsLock", false);
 		Debug.Log("OnClickCloseButton!!!!!!!!");
+
+		EventManager.Notify("fpsLock", false);
 		PanelManager.Inst.PopPanel(this);
 	}
 }

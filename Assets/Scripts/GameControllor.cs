@@ -16,10 +16,12 @@ public class GameControllor : MonoBehaviour
 	public void Init( )
 	{
         PanelManager.Inst.Init( );
-		playerControllor.Init(inputManager);
+		playerControllor.Init( );
+
 		InputManager.OnEscapeKeyDown += OnEscapeKeyDown;
 	}
 
+	// TODO 游戏封面
 	public void StartGame( )
 	{
 		//PanelManager.Inst.PushPanel<MainPanel>("UIPrefabs/MainPanel");

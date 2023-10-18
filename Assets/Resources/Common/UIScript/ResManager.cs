@@ -4,7 +4,7 @@ namespace Common.UIScript
 {
     public static class ResManager
     {
-
+        // 加载gameobject 不实例化
         public static GameObject LoadGameObjectSync(string location)
         {
             GameObject prefab = Resources.Load<GameObject>(location);
@@ -16,7 +16,8 @@ namespace Common.UIScript
 
             return prefab;
         }
-
+        
+        // 加载gameobject 并且实例化
         public static GameObject InstantiateGameObjectSync(string location)
         {
             GameObject prefab = Resources.Load<GameObject>(location);
