@@ -26,6 +26,12 @@ public class PlayerControllor : MonoBehaviour
 	public float RunSpeed;
 	public float CurrentSpeed { get; private set; }
 
+	private Vector3 forwardDirection;
+	private Vector3 rightDirection;
+
+	private float tmp_Horizontal;
+	private float tmp_Vertical;
+
 	void Start( )
 	{
 		/// 注册开面板事件，设置characterLock参数，当设置为false时，update函数不再运行，将鼠标释放出来
@@ -99,20 +105,20 @@ public class PlayerControllor : MonoBehaviour
 		CurrentSpeed = WalkSpeed;
 		if ( characterController.isGrounded )
 		{
-			var tmp_Horizontal = Input.GetAxis("Horizontal");
-			var tmp_Vertical = Input.GetAxis("Vertical");
+			tmp_Horizontal = Input.GetAxis("Horizontal");
+			tmp_Vertical = Input.GetAxis("Vertical");
 
 			//CameraVec.x = playerCamera.transform.rotation.x;
 			//CameraVec.x = playerCamera.transform.rotation.x;
-			Debug.Log("playerCamera " + playerCamera.transform.rotation);
+			Debug.Log("playerCamera " + tmp_Horizontal);
 			//movementDirection = playerCamera.transform.TransformDirection(new Vector3(tmp_Horizontal, 0, tmp_Vertical)).normalized;
 			//movementDirection.y = 0;
 
 			//Vector3 moveDirection = new Vector3(tmp_Horizontal, 0f, tmp_Vertical).normalized;
 			// TODO 奔跑 + 下蹲
 
-			Vector3 forwardDirection = playerCamera.transform.forward;
-			Vector3 rightDirection = playerCamera.transform.right;
+			forwardDirection = playerCamera.transform.forward;
+			rightDirection = playerCamera.transform.right;
 			forwardDirection.y = 0f;
 			rightDirection.y = 0f;
 			forwardDirection.Normalize();
@@ -158,8 +164,7 @@ public class PlayerControllor : MonoBehaviour
 		var tmp_Movement = CurrentSpeed * movementDirection;
 		characterController.Move(tmp_Movement);
 
-		characterAnimator.SetFloat("Velocity", characterController.velocity.magnitude, 0.25f, Time.deltaTime);
-		Debug.Log("shifting" + characterController.velocity.x);
-		//characterAnimator.SetFloat("shifting", characterController.velocity.x, 0.25f, Time.deltaTime);
+		characterAnimator.SetFloat("Velocity", forwardDirection.magnitude, 0.25f, Time.deltaTime);
+		characterAnimator.SetFloat("shifting", - rightDirection.magnitude * tmp_Horizontal, 0.25f, Time.deltaTime);
 	}
 }
