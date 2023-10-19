@@ -101,9 +101,28 @@ public class PlayerControllor : MonoBehaviour
 		{
 			var tmp_Horizontal = Input.GetAxis("Horizontal");
 			var tmp_Vertical = Input.GetAxis("Vertical");
-			movementDirection = playerCamera.transform.TransformDirection(new Vector3(tmp_Horizontal, 0, tmp_Vertical)).normalized;
-			movementDirection.y = 0;
+
+			//CameraVec.x = playerCamera.transform.rotation.x;
+			//CameraVec.x = playerCamera.transform.rotation.x;
+			Debug.Log("playerCamera " + playerCamera.transform.rotation);
+			//movementDirection = playerCamera.transform.TransformDirection(new Vector3(tmp_Horizontal, 0, tmp_Vertical)).normalized;
+			//movementDirection.y = 0;
+
+			//Vector3 moveDirection = new Vector3(tmp_Horizontal, 0f, tmp_Vertical).normalized;
 			// TODO 奔跑 + 下蹲
+
+			Vector3 forwardDirection = playerCamera.transform.forward;
+			Vector3 rightDirection = playerCamera.transform.right;
+			forwardDirection.y = 0f;
+			rightDirection.y = 0f;
+			forwardDirection.Normalize();
+			rightDirection.Normalize();
+
+			forwardDirection *= tmp_Vertical;
+			rightDirection *= tmp_Horizontal;
+
+			// 计算摄像机在水平方向上的移动距离
+			movementDirection = forwardDirection + rightDirection;
 		}
 
 		UpdateMoveMent();
@@ -140,5 +159,7 @@ public class PlayerControllor : MonoBehaviour
 		characterController.Move(tmp_Movement);
 
 		characterAnimator.SetFloat("Velocity", characterController.velocity.magnitude, 0.25f, Time.deltaTime);
+		Debug.Log("shifting" + characterController.velocity.x);
+		//characterAnimator.SetFloat("shifting", characterController.velocity.x, 0.25f, Time.deltaTime);
 	}
 }
