@@ -102,7 +102,16 @@ public class PlayerControllor : MonoBehaviour
 	// 控制角色移动
 	private void PlayerMovementControl( )
 	{
-		CurrentSpeed = WalkSpeed;
+
+		if (Input.GetKey(KeyCode.LeftShift))
+        {
+            CurrentSpeed = RunSpeed;
+        }
+		else
+		{
+			CurrentSpeed = WalkSpeed;
+		}
+
 		if ( characterController.isGrounded )
 		{
 			tmp_Horizontal = Input.GetAxis("Horizontal");
@@ -110,7 +119,7 @@ public class PlayerControllor : MonoBehaviour
 
 			//CameraVec.x = playerCamera.transform.rotation.x;
 			//CameraVec.x = playerCamera.transform.rotation.x;
-			Debug.Log("playerCamera " + tmp_Horizontal);
+			//Debug.Log("playerCamera " + tmp_Horizontal);
 			//movementDirection = playerCamera.transform.TransformDirection(new Vector3(tmp_Horizontal, 0, tmp_Vertical)).normalized;
 			//movementDirection.y = 0;
 
@@ -156,15 +165,16 @@ public class PlayerControllor : MonoBehaviour
 		}
 	}
 
-	//更新移动
+	//更新移动 -81.303 -105.43 105.33
 	void UpdateMoveMent( )
 	{
 		//这里是在计算重力下坠
 		movementDirection.y -= gravity * Time.deltaTime;
 		var tmp_Movement = CurrentSpeed * movementDirection;
 		characterController.Move(tmp_Movement);
-
-		characterAnimator.SetFloat("Velocity", forwardDirection.magnitude, 0.25f, Time.deltaTime);
+		
+		Debug.Log("UpdateMoveMent   " + forwardDirection.magnitude + " tmp_Movement = " + tmp_Movement);
+		characterAnimator.SetFloat("Velocity", forwardDirection.magnitude * CurrentSpeed * 50, 0.25f, Time.deltaTime);
 		characterAnimator.SetFloat("shifting", - rightDirection.magnitude * tmp_Horizontal, 0.25f, Time.deltaTime);
 	}
 }
