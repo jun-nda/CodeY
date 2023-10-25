@@ -7,9 +7,8 @@ public class rifle : Weapon {
 
 	public override void OpenFire () {
 		if (m_CurrentAmmo <= 0) return;
-		m_CurrentAmmo--;
-		// if (!IsAllowShooting()) return;
-		// MuzzleParticle.Play();
+		if (!IsAllowShooting()) return;
+		m_MuzzleParticle.Play();
 		// CurrentAmmo -= 1;
 		//
 		// GunAnimator.Play("Fire", IsAiming ? 1 : 0, 0);
@@ -20,11 +19,23 @@ public class rifle : Weapon {
 		// CreateBullet();
 		// CasingParticle.Play();
 		// mouseLook.FiringForTest();
+		m_CurrentAmmo--;
 		m_LastFireTime = Time.time;
 	}
 	
-	protected override void  Reload () {
-		
+	protected override void  Reload ()
+	{
+		if (m_CurrentAmmoAll <= 0) return;
+		if ( m_CurrentAmmoAll +  m_CurrentAmmo >= m_AmmoEach)
+		{
+			m_CurrentAmmoAll -= m_AmmoEach - m_CurrentAmmo;
+			m_CurrentAmmo = m_AmmoEach;
+		}
+		else
+		{
+			m_CurrentAmmo += m_CurrentAmmoAll;
+			m_CurrentAmmoAll = 0;
+		}
 	}
 	
 	// Start is called before the first frame update
@@ -36,6 +47,11 @@ public class rifle : Weapon {
 	void Update () {
 		if (Input.GetMouseButton(0)) {
 			OpenFire();
+		}
+
+		if (Input.GetKeyDown(KeyCode.R))
+		{
+			Reload();
 		}
 	}
 }
