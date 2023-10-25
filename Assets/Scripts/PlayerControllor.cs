@@ -6,6 +6,7 @@ public class PlayerControllor : MonoBehaviour
 {
 	private CharacterController characterController;
 	private Animator characterAnimator;
+	private bool isInited = false;
 
 	/// <summary>
 	/// 控制角色是否继续更新（此时在开面板，相当于是暂停）初始是暂停
@@ -35,9 +36,12 @@ public class PlayerControllor : MonoBehaviour
 	void Start( )
 	{
 		/// 注册开面板事件，设置characterLock参数，当设置为false时，update函数不再运行，将鼠标释放出来
-		EventManager.Register("fpsLock", SetCharacterLockState);
+		EventManager.AddListener<CaharacterPause>(SetCharacterLockState);
+
 		characterAnimator = GetComponentInChildren<Animator>( );
 		characterController = GetComponent<CharacterController>( );
+
+		characterAnimator.enabled = false;
 	}
 
 	public void Init( )
@@ -47,15 +51,17 @@ public class PlayerControllor : MonoBehaviour
 		InputManager.OnEscapeKeyDown += HandleEscapeKeyDown;
 
 		characterAnimator.enabled = false;
+
+		isInited = true;
 	}
 
 	/// <summary>
-	/// 设置状态
+	/// 设置状态 传true是锁住，暂停
 	/// </summary>
-	/// <param name="eventData">开关</param>
-	public void SetCharacterLockState( object eventData )
+	/// <param name="eventData"> </param>
+	public void SetCharacterLockState( CaharacterPause eventData )
 	{
-		bool isLock = (bool)eventData;
+		bool isLock = eventData.Value;
 		characterLock = isLock;
 
 		if ( characterLock == false )
@@ -72,12 +78,11 @@ public class PlayerControllor : MonoBehaviour
 			Cursor.visible = true;
 			Cursor.lockState = CursorLockMode.None;
 		}
-
 	}
 
 	void Update( )
 	{
-		if ( characterLock == false )
+		if ( characterLock == false && isInited == true)
 		{
 			CameraControl( );
 			PlayerMovementControl( );
@@ -172,8 +177,8 @@ public class PlayerControllor : MonoBehaviour
 		movementDirection.y -= gravity * Time.deltaTime;
 		var tmp_Movement = CurrentSpeed * movementDirection;
 		characterController.Move(tmp_Movement);
-		
-		Debug.Log("UpdateMoveMent   " + forwardDirection.magnitude + " tmp_Movement = " + tmp_Movement);
+
+		//Debug.Log("UpdateMoveMent   " + forwardDirection.magnitude + " tmp_Movement = " + tmp_Movement);
 		characterAnimator.SetFloat("Velocity", forwardDirection.magnitude * CurrentSpeed * 50, 0.25f, Time.deltaTime);
 		characterAnimator.SetFloat("shifting", - rightDirection.magnitude * tmp_Horizontal, 0.25f, Time.deltaTime);
 	}

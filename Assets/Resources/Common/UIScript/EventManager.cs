@@ -5,37 +5,49 @@ namespace Common.UIScript
 {
     public static class EventManager
     {
-        private static Dictionary<string, Action<object>> eventTable = new Dictionary<string, Action<object>>();
+        private static Dictionary<Type, LinkedList<Delegate>> eventTable = new Dictionary<Type, LinkedList<Delegate>>();
 
-        public static void Register(string eventName, Action<object> callback)
+        public static void AddListener<T>(Action<T> listener) where T : EventArgs
         {
-            if (eventTable.ContainsKey(eventName))
+            Type eventType = typeof(T);
+            if (!eventTable.ContainsKey(eventType))
             {
-                eventTable[eventName] += callback;
+                eventTable.Add(eventType, new LinkedList<Delegate>());
             }
-            else
-            {
-                eventTable[eventName] = callback;
-            }
+
+            eventTable[eventType].AddLast(listener);
         }
 
-        public static void Unregister(string eventName, Action<object> callback)
+        public static void RemoveListener<T>(Action<T> listener) where T : EventArgs
         {
-            if (eventTable.ContainsKey(eventName))
+            Type eventType = typeof(T);
+            if (eventTable.ContainsKey(eventType))
             {
-                eventTable[eventName] -= callback;
-                if (eventTable[eventName] == null)
+                LinkedListNode<Delegate> node = eventTable[eventType].First;
+                while (node != null)
                 {
-                    eventTable.Remove(eventName);
+                    if (node.Value.Equals(listener))
+                    {
+                        eventTable[eventType].Remove(node);
+                        break;
+                    }
+
+                    node = node.Next;
                 }
             }
         }
 
-        public static void Notify(string eventName, object eventData = null)
+        public static void SendMessage<T>(T eventArgs) where T : EventArgs
         {
-            if (eventTable.ContainsKey(eventName))
+            Type eventType = typeof(T);
+            if (eventTable.ContainsKey(eventType))
             {
-                eventTable[eventName]?.Invoke(eventData);
+                LinkedListNode<Delegate> node = eventTable[eventType].First;
+                while (node != null)
+                {
+                    ((Action<T>)node.Value).Invoke(eventArgs);
+                    node = node.Next;
+                }
             }
         }
     }

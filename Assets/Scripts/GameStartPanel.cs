@@ -6,9 +6,6 @@ public class GameStartPanel : PanelBase
 {
 	void Start( )
 	{
-		Debug.Log("Start!!!!!");
-
-		EventManager.Notify("fpsLock", true);
 	}
 
 	/// <summary>
@@ -18,7 +15,7 @@ public class GameStartPanel : PanelBase
 	{
 		Debug.Log("OnClickCloseButton!!!!!!!!");
 
-		EventManager.Notify("fpsLock", false);
+		EventManager.SendMessage(new GameStartEventArgs(true));
 		PanelManager.Inst.PopPanel(this);
 	}
 }

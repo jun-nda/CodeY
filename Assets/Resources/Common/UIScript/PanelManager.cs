@@ -139,7 +139,7 @@ namespace Common.UIScript
 
         public PanelBase PushPanel(string res)
         {
-            Debug.Log("PushPanel  " + res);
+            //Debug.Log("PushPanel  " + res);
             GameObject canvasPanel = GameObject.Instantiate(canvasPanelRes);
             canvasPanel.transform.SetParent(rootTrans);
             var resGo = ResManager.LoadGameObjectSync(res);
@@ -256,5 +256,27 @@ namespace Common.UIScript
             sb.Append($"stackCount {panelStack.Count}");
             return sb.ToString();
         }
+
+        /// <summary>
+        /// 检查当前是否存在这个名称的面板（防止弹出多个）
+        /// </summary>
+        /// <param name="panelName"></param>
+        /// <returns></returns>
+        public bool CheckHavePanel( string panelName )
+		{
+            int i = 0;
+            while (panelStack.Count > 0 && panelStack.Count >= i)
+            {
+                var panel = panelStack.CheckByIndex(i);
+				if ( panelName == panel.name )
+				{
+                    return true;
+				}
+
+                i ++;
+            }
+
+            return false;
+		}
     }
 }

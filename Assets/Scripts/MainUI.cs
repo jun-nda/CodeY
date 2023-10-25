@@ -6,16 +6,19 @@ public class MainPanel : PanelBase
 {
 	void Start( )
 	{
-		Debug.Log("Start!!!!!");
-
-		EventManager.Notify("fpsLock", true);
+		EventManager.SendMessage(new CaharacterPause(true));
 	}
 
 	public void OnClickCloseButton( )
 	{
 		Debug.Log("OnClickCloseButton!!!!!!!!");
-
-		EventManager.Notify("fpsLock", false);
+		
+		EventManager.SendMessage(new CaharacterPause(false));
 		PanelManager.Inst.PopPanel(this);
+	}
+
+	public void OnDestroy( )
+	{
+		
 	}
 }
