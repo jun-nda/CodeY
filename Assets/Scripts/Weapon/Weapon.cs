@@ -22,10 +22,12 @@ public abstract class Weapon : MonoBehaviour,IWeapon {
 	public int m_AmmoEach = 30;
 	public int m_AmmoAll = 120;
 	protected int m_CurrentAmmo;
+	protected int m_CurrentAmmoAll;
 
 
 	protected void Awake () {
 		m_CurrentAmmo = m_AmmoEach;
+		m_CurrentAmmoAll = m_AmmoAll;
 	}
 
 
