@@ -6,7 +6,9 @@ public class PlayerControllor : MonoBehaviour
 {
 	private CharacterController characterController;
 	private Animator characterAnimator;
+	private GameObject Weapon;
 	private bool isInited = false;
+	private String NextWeapon;
 
 	/// <summary>
 	/// 控制角色是否继续更新（此时在开面板，相当于是暂停）初始是暂停
@@ -38,10 +40,11 @@ public class PlayerControllor : MonoBehaviour
 		/// 注册开面板事件，设置characterLock参数，当设置为false时，update函数不再运行，将鼠标释放出来
 		EventManager.AddListener<CaharacterPause>(SetCharacterLockState);
 
-		characterAnimator = GetComponentInChildren<Animator>( );
+		/// 注册开面板事件，设置characterLock参数，当设置为false时，update函数不再运行，将鼠标释放出来
+		EventManager.AddListener<WeaponPickDownFinished>(PickDownWeaponFinished);
+
 		characterController = GetComponent<CharacterController>( );
 
-		characterAnimator.enabled = false;
 	}
 
 	public void Init( )
@@ -50,9 +53,10 @@ public class PlayerControllor : MonoBehaviour
 		InputManager.OnSpaceKeyDown += HandleSpaceKeyDown;
 		InputManager.OnEscapeKeyDown += HandleEscapeKeyDown;
 
-		characterAnimator.enabled = false;
-
 		isInited = true;
+
+		// TODO 目前是写死的
+		LoadWeapon( "Prefabs/Weapon1" );
 	}
 
 	/// <summary>
@@ -66,14 +70,16 @@ public class PlayerControllor : MonoBehaviour
 
 		if ( characterLock == false )
 		{
-			characterAnimator.enabled = true;
+			if ( characterAnimator != null )
+				characterAnimator.enabled = true;
 
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
 		}
 		else
 		{ 
-			characterAnimator.enabled = false;
+			if ( characterAnimator != null )
+				characterAnimator.enabled = false;
 
 			Cursor.visible = true;
 			Cursor.lockState = CursorLockMode.None;
@@ -86,6 +92,12 @@ public class PlayerControllor : MonoBehaviour
 		{
 			CameraControl( );
 			PlayerMovementControl( );
+		}
+
+		 if (Input.GetKeyDown(KeyCode.K))
+		{
+			Debug.Log("Input.GetKeyDown(KeyCode.K)");
+			ChangeWeapon( "Prefabs/Weapon1" );
 		}
 	}
 
@@ -178,8 +190,65 @@ public class PlayerControllor : MonoBehaviour
 		var tmp_Movement = CurrentSpeed * movementDirection;
 		characterController.Move(tmp_Movement);
 
+		//Debug.Log("characterAnimator" + characterAnimator);
 		//Debug.Log("UpdateMoveMent   " + forwardDirection.magnitude + " tmp_Movement = " + tmp_Movement);
-		characterAnimator.SetFloat("Velocity", forwardDirection.magnitude * CurrentSpeed * 50, 0.25f, Time.deltaTime);
-		characterAnimator.SetFloat("shifting", - rightDirection.magnitude * tmp_Horizontal, 0.25f, Time.deltaTime);
+		if ( characterAnimator != null )
+		{
+			characterAnimator.SetFloat("Velocity", forwardDirection.magnitude * CurrentSpeed * 50, 0.25f, Time.deltaTime);
+			characterAnimator.SetFloat("shifting", - rightDirection.magnitude * tmp_Horizontal, 0.25f, Time.deltaTime);
+		}
+		else
+		{
+			characterAnimator = GetComponentInChildren<Animator>( );
+		}
+	}
+
+	// 加载枪械
+	public void LoadWeapon( string str )
+	{
+		characterAnimator = null;
+        Weapon = ResManager.InstantiateGameObjectSync(str);
+        Weapon.transform.SetParent(playerCamera.transform);
+		Weapon.transform.localScale = new Vector3(1, 1, 1);
+		
+		Debug.Log("1111111LoadWeapon1111" + characterAnimator);
+		characterAnimator = GetComponentInChildren<Animator>( );
+		Debug.Log("==========LoadWeapon=============" + characterAnimator);
+	}
+
+	/// <summary>
+	/// 换枪，没有武器就拿默认的，有武器先执行PickDown
+	/// </summary>
+	public void ChangeWeapon( string nextWeapon )
+	{
+		// 当前没有武器
+		if ( Weapon == null )
+		{
+			LoadWeapon( nextWeapon );
+			NextWeapon = null;
+		}
+		else
+		{
+			NextWeapon = nextWeapon;
+			characterAnimator.Play("ar1_PickDown");
+		}
+	}
+
+	/// 收枪结束，要是有要拿的下一把枪就拿
+	public void PickDownWeaponFinished( WeaponPickDownFinished EventData )
+	{
+		if ( Weapon != null )
+		{
+			Debug.Log("Destroy111111" + characterAnimator);
+			GameObject.Destroy(Weapon);
+			characterAnimator = null;
+			Debug.Log("Destroy22222" + characterAnimator);
+		}
+
+		if ( NextWeapon != null )
+		{
+			LoadWeapon( NextWeapon );
+			NextWeapon = null;
+		}
 	}
 }
