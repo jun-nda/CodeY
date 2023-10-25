@@ -56,6 +56,11 @@ namespace Common.UIScript
             return t;
         }
 
+        public T CheckByIndex(int index)
+        {
+            return list[index];
+        }
+
         public int Count => list.Count;
     }
 }

@@ -8,34 +8,42 @@ public class GameControllor : MonoBehaviour
 	[SerializeField] private InputManager inputManager;
 	[SerializeField] private GameObject InitImageBg;
 
+	//private bool MianUIOpend = true;
+
 	private void Start( )
 	{
 		Init( );
-		StartGame(false);
+		//StartGame(false);
 	}
 
 	public void Init( )
 	{
-		EventManager.Register("StartGame", StartGame);
+		//EventManager.Register("StartGame", StartGame);
+		EventManager.AddListener<GameStartEventArgs>(StartGame);
 
 		PanelManager.Inst.Init( );
-		playerControllor.Init( );
+		PanelManager.Inst.PushPanel<GameStartPanel>("UIPrefabs/GameStartPanel");
 
 		InputManager.OnEscapeKeyDown += OnEscapeKeyDown;
+		InitImageBg.SetActive(false);
 	}
 
-	// TODO 游戏封面
+	// TODO 在playerControllor里面把枪械，手臂模型摘出来，做成动态加载
 	public void StartGame( object eventData )
 	{
-		InitImageBg.SetActive(false);
-		PanelManager.Inst.PushPanel<GameStartPanel>("UIPrefabs/GameStartPanel");
+		Debug.Log("============StartGame=============");
+
+		playerControllor.Init( );
+		EventManager.SendMessage(new CaharacterPause(false));
 	}
 
 	public void OnEscapeKeyDown( )
 	{
-		PanelManager.Inst.PushPanel<MainPanel>("UIPrefabs/MainPanel");
-	}
+		bool have = PanelManager.Inst.CheckHavePanel("MainPanel");
 
+		if ( have == false )
+			PanelManager.Inst.PushPanel<MainPanel>("UIPrefabs/MainPanel");
+	}
 	 public void OnDestroy()
     {
     }
