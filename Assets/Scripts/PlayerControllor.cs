@@ -7,7 +7,12 @@ public class PlayerControllor : MonoBehaviour
 	private CharacterController characterController;
 	private Animator characterAnimator;
 	private GameObject Weapon;
+
 	private bool isInited = false;
+
+	/// <summary>
+	/// 切枪时缓存一下下一把枪是啥
+	/// </summary>
 	private String NextWeapon;
 
 	/// <summary>
@@ -182,7 +187,7 @@ public class PlayerControllor : MonoBehaviour
 		}
 	}
 
-	//更新移动 -81.303 -105.43 105.33
+	//更新移动
 	void UpdateMoveMent( )
 	{
 		//这里是在计算重力下坠
@@ -203,7 +208,9 @@ public class PlayerControllor : MonoBehaviour
 		}
 	}
 
-	// 加载枪械
+	/// <summary>
+	/// 加载枪械，重设Weapon以及characterAnimator 参数是枪械的路径
+	/// </summary>
 	public void LoadWeapon( string str )
 	{
 		characterAnimator = null;
@@ -234,15 +241,15 @@ public class PlayerControllor : MonoBehaviour
 		}
 	}
 
+	/// <summary>
 	/// 收枪结束，要是有要拿的下一把枪就拿
+	/// </summary>
 	public void PickDownWeaponFinished( WeaponPickDownFinished EventData )
 	{
 		if ( Weapon != null )
 		{
-			Debug.Log("Destroy111111" + characterAnimator);
 			GameObject.Destroy(Weapon);
 			characterAnimator = null;
-			Debug.Log("Destroy22222" + characterAnimator);
 		}
 
 		if ( NextWeapon != null )
