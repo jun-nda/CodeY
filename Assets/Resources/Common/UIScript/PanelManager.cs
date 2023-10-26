@@ -265,8 +265,9 @@ namespace Common.UIScript
         public bool CheckHavePanel( string panelName )
 		{
             int i = 0;
-            while (panelStack.Count > 0 && panelStack.Count >= i)
+            while (panelStack.Count > 0 && panelStack.Count > i)
             {
+                Debug.Log("CheckHavePanel" + i);
                 var panel = panelStack.CheckByIndex(i);
 				if ( panelName == panel.name )
 				{

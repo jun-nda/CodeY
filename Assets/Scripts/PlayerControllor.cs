@@ -45,8 +45,11 @@ public class PlayerControllor : MonoBehaviour
 		/// 注册开面板事件，设置characterLock参数，当设置为false时，update函数不再运行，将鼠标释放出来
 		EventManager.AddListener<CaharacterPause>(SetCharacterLockState);
 
-		/// 注册开面板事件，设置characterLock参数，当设置为false时，update函数不再运行，将鼠标释放出来
+		/// 武器收起动画结束事件回调
 		EventManager.AddListener<WeaponPickDownFinished>(PickDownWeaponFinished);
+
+		/// 注册开面板事件，设置characterLock参数，当设置为false时，update函数不再运行，将鼠标释放出来
+		EventManager.AddListener<ChangeWeapon>(ChangeWeapon);
 
 		characterController = GetComponent<CharacterController>( );
 
@@ -67,7 +70,6 @@ public class PlayerControllor : MonoBehaviour
 	/// <summary>
 	/// 设置状态 传true是锁住，暂停
 	/// </summary>
-	/// <param name="eventData"> </param>
 	public void SetCharacterLockState( CaharacterPause eventData )
 	{
 		bool isLock = eventData.Value;
@@ -102,7 +104,7 @@ public class PlayerControllor : MonoBehaviour
 		 if (Input.GetKeyDown(KeyCode.K))
 		{
 			Debug.Log("Input.GetKeyDown(KeyCode.K)");
-			ChangeWeapon( "Prefabs/Weapon1" );
+			ChangeWeapon( new ChangeWeapon("Prefabs/Weapon1") );
 		}
 	}
 
@@ -226,17 +228,18 @@ public class PlayerControllor : MonoBehaviour
 	/// <summary>
 	/// 换枪，没有武器就拿默认的，有武器先执行PickDown
 	/// </summary>
-	public void ChangeWeapon( string nextWeapon )
+	public void ChangeWeapon( ChangeWeapon eventData )
 	{
+		string weaponName = eventData.WeaponNmae;
 		// 当前没有武器
 		if ( Weapon == null )
 		{
-			LoadWeapon( nextWeapon );
+			LoadWeapon( weaponName );
 			NextWeapon = null;
 		}
 		else
 		{
-			NextWeapon = nextWeapon;
+			NextWeapon = weaponName;
 			characterAnimator.Play("ar1_PickDown");
 		}
 	}

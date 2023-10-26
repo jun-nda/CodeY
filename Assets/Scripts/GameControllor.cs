@@ -35,14 +35,15 @@ public class GameControllor : MonoBehaviour
 
 		playerControllor.Init( );
 		EventManager.SendMessage(new CaharacterPause(false));
+		PanelManager.Inst.PushPanel<GameUI>("UIPrefabs/MainPanel");
 	}
 
 	public void OnEscapeKeyDown( )
 	{
-		bool have = PanelManager.Inst.CheckHavePanel("MainPanel");
+		bool have = PanelManager.Inst.CheckHavePanel("SettingPanel");
 
 		if ( have == false )
-			PanelManager.Inst.PushPanel<MainPanel>("UIPrefabs/MainPanel");
+			PanelManager.Inst.PushPanel<MainPanel>("UIPrefabs/SettingPanel");
 	}
 	 public void OnDestroy()
     {
