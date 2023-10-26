@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 public class ChangeWeapon : EventArgs
 {
-    public string WeaponNmae { get; set; }
+    public WeaponType WeaponType { get; set; }
 
-    public ChangeWeapon(string weaponNmae)
+    public ChangeWeapon(WeaponType weaponType)
     {
-        WeaponNmae = weaponNmae;
+        WeaponType = weaponType;
     }
 }

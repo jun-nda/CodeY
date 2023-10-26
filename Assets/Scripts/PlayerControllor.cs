@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Common.UIScript;
+using GameData;
 
 public class PlayerControllor : MonoBehaviour
 {
@@ -61,9 +62,6 @@ public class PlayerControllor : MonoBehaviour
 		InputManager.OnSpaceKeyDown += HandleSpaceKeyDown;
 
 		isInited = true;
-
-		// TODO 目前是写死的
-		LoadWeapon( "Prefabs/Weapon1" );
 	}
 
 	/// <summary>
@@ -104,7 +102,7 @@ public class PlayerControllor : MonoBehaviour
 		 if (Input.GetKeyDown(KeyCode.K))
 		{
 			Debug.Log("Input.GetKeyDown(KeyCode.K)");
-			ChangeWeapon( new ChangeWeapon("Prefabs/Pistol1") );
+			ChangeWeapon( new ChangeWeapon( WeaponType.Weapon_AK ) );
 		}
 	}
 
@@ -223,7 +221,7 @@ public class PlayerControllor : MonoBehaviour
 	/// </summary>
 	public void ChangeWeapon( ChangeWeapon eventData )
 	{
-		string weaponName = eventData.WeaponNmae;
+		string weaponName = DataManager.Inst.GetWeaponTypeString( eventData.WeaponType );
 		// 当前没有武器
 		if ( Weapon == null )
 		{
