@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Common.UIScript;
 using GameData;
+
 public class GameControllor : MonoBehaviour
 {
 	[SerializeField] private PlayerControllor playerControllor;
@@ -41,7 +42,7 @@ public class GameControllor : MonoBehaviour
 		CreatePlayer( );
 
 		EventManager.SendMessage(new CaharacterPause(false));
-		PanelManager.Inst.PushPanel<GameUI>("UIPrefabs/MainPanel");
+		PanelManager.Inst.PushPanel<GameUI>("UIPrefabs/MainPanel").OnPush(playerWeaponBackPack);
 	}
 
 	public void CreatePlayer( )
