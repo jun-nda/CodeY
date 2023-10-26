@@ -44,7 +44,7 @@ AnimatorStateMachine:
     m_Position: {x: 745, y: 605, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4329560481679809503}
-    m_Position: {x: 490, y: 40, z: 0}
+    m_Position: {x: 520, y: 70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3774877323131696236}
     m_Position: {x: 500, y: -140, z: 0}
@@ -227,7 +227,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ar1_PickDown
+  m_Name: PickDown
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []

@@ -48,7 +48,7 @@ public class PlayerControllor : MonoBehaviour
 		/// 武器收起动画结束事件回调
 		EventManager.AddListener<WeaponPickDownFinished>(PickDownWeaponFinished);
 
-		/// 注册开面板事件，设置characterLock参数，当设置为false时，update函数不再运行，将鼠标释放出来
+		/// 换枪事件
 		EventManager.AddListener<ChangeWeapon>(ChangeWeapon);
 
 		characterController = GetComponent<CharacterController>( );
@@ -59,7 +59,6 @@ public class PlayerControllor : MonoBehaviour
 	{
 		InputManager.OnMouseMoveDelta += HandleMouseMove;
 		InputManager.OnSpaceKeyDown += HandleSpaceKeyDown;
-		InputManager.OnEscapeKeyDown += HandleEscapeKeyDown;
 
 		isInited = true;
 
@@ -101,10 +100,11 @@ public class PlayerControllor : MonoBehaviour
 			PlayerMovementControl( );
 		}
 
+		// 测试换枪
 		 if (Input.GetKeyDown(KeyCode.K))
 		{
 			Debug.Log("Input.GetKeyDown(KeyCode.K)");
-			ChangeWeapon( new ChangeWeapon("Prefabs/Weapon1") );
+			ChangeWeapon( new ChangeWeapon("Prefabs/Pistol1") );
 		}
 	}
 
@@ -172,13 +172,6 @@ public class PlayerControllor : MonoBehaviour
 		//Debug.Log("HandleMouseMove" + vec);
 	}
 
-	// ESC打开设置面板
-	private void HandleEscapeKeyDown( )
-	{
-		characterLock = true;
-		Debug.Log("OnEscapeKeyDown");
-	}
-
 	// 空格键跳跃
 	private void HandleSpaceKeyDown( )
 	{
@@ -240,7 +233,7 @@ public class PlayerControllor : MonoBehaviour
 		else
 		{
 			NextWeapon = weaponName;
-			characterAnimator.Play("ar1_PickDown");
+			characterAnimator.Play("PickDown");
 		}
 	}
 
