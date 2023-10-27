@@ -31,6 +31,9 @@ public class GameUI : PanelBase
 		{
 			var go = Instantiate(WeaponBackPackItem, WeaponBackPackContainer.transform);
             go.transform.localScale = new Vector3(itemScale, itemScale, itemScale);
+
+			WeaponItem item = go.GetComponent<WeaponItem>();
+			item.SetData(weaponBackPack.weapons[i]);
 		}
 	}
 

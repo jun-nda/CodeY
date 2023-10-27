@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Common.UIScript;
+using GameData;
 
 namespace GameConfig
 {
 	public partial class ConfigManager : Singleton<ConfigManager>
 	{
-		//private List<WeaponConfig> weaponConfigs;
-		private Dictionary<WeaponType, WeaponConfig> weaponConfigs;
+		private Dictionary<WeaponType, WeaponConfig> weaponConfigs = new Dictionary<WeaponType, WeaponConfig>();
 
 		public void Init( )
 		{
@@ -19,23 +20,21 @@ namespace GameConfig
 		/// </summary>
 		public void InitWeaponConfigs( )
 		{
-			WeaponConfig ak47Config = new WeaponConfig( );
-			ak47Config.name = "AK47";
-			ak47Config.prefabPath = "Prefabs/Weapon_AK";
-			ak47Config.weaponType = WeaponType.Weapon_AK;
-			ak47Config.fireRate = 0.1f;
-			ak47Config.magazineSize = 30;
-			ak47Config.damage = 30;
+			WeaponConfig ak47Config = new WeaponConfig(
+				"AK47",
+				WeaponType.Weapon_AK,
+				"Prefabs/Weapon_AK",
+				"Images/Weapon/AK47"
+			);
 
 			weaponConfigs.Add(WeaponType.Weapon_AK, ak47Config);
 
-			WeaponConfig PSMConfig = new WeaponConfig( );
-			PSMConfig.name = "AK47";
-			PSMConfig.prefabPath = "Prefabs/Weapon_PSM";
-			PSMConfig.weaponType = WeaponType.Weapon_PSM;
-			PSMConfig.fireRate = 0.1f;
-			PSMConfig.magazineSize = 30;
-			PSMConfig.damage = 30;
+			WeaponConfig PSMConfig = new WeaponConfig(
+				"PSM", 
+				WeaponType.Weapon_PSM,
+				"Prefabs/Weapon_PSM",
+				"Images/Weapon/PSM"
+			);
 
 			weaponConfigs.Add(WeaponType.Weapon_PSM, PSMConfig);
 		}

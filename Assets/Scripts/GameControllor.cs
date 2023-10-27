@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Common.UIScript;
 using GameData;
+using GameConfig;
 
 public class GameControllor : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class GameControllor : MonoBehaviour
 
 		PanelManager.Inst.Init( );
 		PanelManager.Inst.PushPanel<GameStartPanel>("UIPrefabs/GameStartPanel");
+
+		ConfigManager.Inst.Init();
 
 		InputManager.OnEscapeKeyDown += OnEscapeKeyDown;
 		InitImageBg.SetActive(false);
