@@ -6,7 +6,7 @@ using Common.UIScript;
 namespace GameData
 {
 	/// <summary>
-	/// 玩家的背包列表,存的是武器的type
+	/// 玩家的背包列表,存的是武器的type TODO替换成weaponData
 	/// </summary>
 	public partial class WeaponBackPack
 	{
