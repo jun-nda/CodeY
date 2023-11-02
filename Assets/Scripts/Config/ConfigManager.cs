@@ -20,7 +20,7 @@ namespace GameConfig
 		/// </summary>
 		public void InitWeaponConfigs( )
 		{
-			WeaponConfig ak47Config = new WeaponConfig(
+			WeaponConfig ak47Config = new(
 				"AK47",
 				WeaponType.Weapon_AK,
 				"Prefabs/Weapon_AK",
@@ -29,7 +29,7 @@ namespace GameConfig
 
 			weaponConfigs.Add(WeaponType.Weapon_AK, ak47Config);
 
-			WeaponConfig PSMConfig = new WeaponConfig(
+			WeaponConfig PSMConfig = new(
 				"PSM", 
 				WeaponType.Weapon_PSM,
 				"Prefabs/Weapon_PSM",
