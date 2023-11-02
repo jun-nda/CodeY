@@ -1,38 +1,20 @@
 fileFormatVersion: 2
-guid: 28e17bc7979110d449d0b3af228f0b30
+guid: f51e493a8b9df094b868413e03a7d0e1
+timeCreated: 1470493406
+licenseType: Store
 AudioImporter:
-  externalObjects: {}
-  serializedVersion: 7
+  serializedVersion: 6
   defaultSettings:
-    serializedVersion: 2
     loadType: 0
     sampleRateSetting: 0
-    sampleRateOverride: 44100
-    compressionFormat: 0
+    sampleRateOverride: 0
+    compressionFormat: 1
     quality: 1
     conversionMode: 0
-    preloadAudioData: 0
-  platformSettingOverrides:
-    4:
-      serializedVersion: 2
-      loadType: 0
-      sampleRateSetting: 0
-      sampleRateOverride: 44100
-      compressionFormat: 3
-      quality: 1
-      conversionMode: 0
-      preloadAudioData: 0
-    7:
-      serializedVersion: 2
-      loadType: 0
-      sampleRateSetting: 0
-      sampleRateOverride: 44100
-      compressionFormat: 1
-      quality: 1
-      conversionMode: 0
-      preloadAudioData: 0
+  platformSettingOverrides: {}
   forceToMono: 0
   normalize: 1
+  preloadAudioData: 1
   loadInBackground: 0
   ambisonic: 0
   3D: 1
