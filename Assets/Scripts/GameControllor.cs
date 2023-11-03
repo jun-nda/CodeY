@@ -11,17 +11,17 @@ public class GameControllor : MonoBehaviour
 	[SerializeField] private GameObject InitImageBg;
 
 	///创建玩家背包
-	private WeaponBackPack playerWeaponBackPack = new WeaponBackPack();
+	private WeaponBackPack playerWeaponBackPack = new WeaponBackPack( );
 
 	//private bool MianUIOpend = true;
 
-	private void Start( )
+	private void Start()
 	{
 		Init( );
 		//StartGame(false);
 	}
 
-	public void Init( )
+	public void Init()
 	{
 		//EventManager.Register("StartGame", StartGame);
 		EventManager.AddListener<GameStartEventArgs>(StartGame);
@@ -29,7 +29,9 @@ public class GameControllor : MonoBehaviour
 		PanelManager.Inst.Init( );
 		PanelManager.Inst.PushPanel<GameStartPanel>("UIPrefabs/GameStartPanel");
 
-		ConfigManager.Inst.Init();
+		ConfigManager.Inst.Init( );
+
+		SettingManager.Inst.Init();
 
 		InputManager.OnEscapeKeyDown += OnEscapeKeyDown;
 		InitImageBg.SetActive(false);
@@ -39,7 +41,7 @@ public class GameControllor : MonoBehaviour
 	}
 
 	// TODO 在playerControllor里面把枪械，手臂模型摘出来，做成动态加载
-	public void StartGame( object eventData )
+	public void StartGame(object eventData)
 	{
 		Debug.Log("============StartGame=============");
 		CreatePlayer( );
@@ -48,7 +50,7 @@ public class GameControllor : MonoBehaviour
 		PanelManager.Inst.PushPanel<GameUI>("UIPrefabs/MainPanel").OnPush(playerWeaponBackPack);
 	}
 
-	public void CreatePlayer( )
+	public void CreatePlayer()
 	{
 		playerWeaponBackPack.AddWeapon(WeaponType.Weapon_AK);
 		playerWeaponBackPack.AddWeapon(WeaponType.Weapon_PSM);
@@ -56,27 +58,27 @@ public class GameControllor : MonoBehaviour
 		playerControllor.Init( );
 	}
 
-	public void OnEscapeKeyDown( )
+	public void OnEscapeKeyDown()
 	{
 		bool have = PanelManager.Inst.CheckHavePanel("SettingPanel");
 
-		if ( have == false )
-			PanelManager.Inst.PushPanel<MainPanel>("UIPrefabs/SettingPanel");
+		if (have == false)
+			PanelManager.Inst.PushPanel<SettingPanel>("UIPrefabs/SettingPanel");
 	}
 
-	public void OnAlpha1KeyDown( )
+	public void OnAlpha1KeyDown()
 	{
 		//Debug.Log("OnAlpha1KeyDown");
 		playerWeaponBackPack.SelectWeapon(1);
 	}
 
-	public void OnAlpha2KeyDown( )
+	public void OnAlpha2KeyDown()
 	{
 		//Debug.Log("OnAlpha2KeyDown");
 		playerWeaponBackPack.SelectWeapon(2);
 	}
 
 	public void OnDestroy()
-    {
-    }
+	{
+	}
 }

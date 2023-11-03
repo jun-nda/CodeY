@@ -4,8 +4,12 @@ using UnityEngine;
 
 namespace GameData
 {
+    /// <summary>
+    /// 这个DataManager设计为了从服务器中获取数据
+    /// </summary>
 	public partial class DataManager : Singleton<DataManager>
 	{
+        // 不要了
         /// <summary>
         /// 根据武器的type获取武器的prefab路径
         /// </summary>

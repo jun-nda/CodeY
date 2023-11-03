@@ -68,3 +68,5 @@ ProjectSettings/EditorSettings.asset
 UniEvent.csproj
 ProjectSettings/EditorBuildSettings.asset
 ProjectSettings/EditorSettings.asset
+Assets/FpsSetting.json
+Assets/FpsSetting.json.meta

@@ -5,53 +5,55 @@ using GameData;
 
 public class GameUI : PanelBase
 {
-    public GameObject WeaponBackPackContainer;
-    public GameObject WeaponBackPackItem;
-    public ToggleGroup toggleGroup;
+	public GameObject WeaponBackPackContainer;
+	public GameObject WeaponBackPackItem;
+	public ToggleGroup toggleGroup;
 
-    private float itemScale = 1;
+	private readonly float itemScale = 1;
 
 	private WeaponBackPack weaponBackPack;
 
-	void Start( )
+	void Start()
 	{
 		/// 换枪事件
 		EventManager.AddListener<ChangeWeapon>(OnChangeWeapon);
+
+		// 背包的枪械换掉时需要重新刷一遍列表
 	}
 
-	public void OnPush( WeaponBackPack playerWeaponBackPack )
+	public void OnPush(WeaponBackPack playerWeaponBackPack)
 	{
 		//playerWeaponBackPack.weapons;
 		weaponBackPack = playerWeaponBackPack;
 		Refresh( );
 	}
 
-	void Refresh( )
+	void Refresh()
 	{
-		for ( int i = 0 ; i < weaponBackPack.weapons.Count ; i++ )
+		for (int i = 0; i < weaponBackPack.weapons.Count; i++)
 		{
 			var go = Instantiate(WeaponBackPackItem, WeaponBackPackContainer.transform, false);
-            go.transform.localScale = new Vector3(itemScale, itemScale, itemScale);
+			go.transform.localScale = new Vector3(itemScale, itemScale, itemScale);
 
 			var script = go.GetComponent<WeaponItem>( );
 			script.SetData(weaponBackPack.weapons[i]);
 		}
 
-		toggleGroup.SetAllTogglesOff(); // 取消所有 Toggle 的选中状态
+		toggleGroup.SetAllTogglesOff( ); // 取消所有 Toggle 的选中状态
 	}
 
 	public void OnChangeWeapon(ChangeWeapon eventData)
 	{
 		int index = weaponBackPack.weapons.IndexOf(eventData.WeaponType);
-		Debug.Log("index = " + index);
-		toggleGroup.SetAllTogglesOff(); // 取消所有 Toggle 的选中状态
+
+		toggleGroup.SetAllTogglesOff( ); // 取消所有 Toggle 的选中状态
 		Transform toggleTransform = WeaponBackPackContainer.transform.GetChild(index);
-		WeaponItem toggleToSelect = toggleTransform.GetComponent<WeaponItem>();
+		WeaponItem toggleToSelect = toggleTransform.GetComponent<WeaponItem>( );
 		toggleToSelect.isOn = true; // 设置指定 Toggle 的选中状态为 true
 	}
 
-	public void OnDestroy( )
+	public void OnDestroy()
 	{
-		
+
 	}
 }

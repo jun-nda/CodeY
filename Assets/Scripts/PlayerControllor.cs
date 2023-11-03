@@ -23,7 +23,6 @@ public class PlayerControllor : MonoBehaviour
 
 	[SerializeField] private Camera playerCamera;
 	public float sensitivity = 5.0f;
-	public float smoothing = 2.0f;
 	public float gravity;
 	public float jumpHeight;
 
@@ -90,25 +89,19 @@ public class PlayerControllor : MonoBehaviour
 		}
 	}
 
-	void Update( )
+	void Update()
 	{
-		if ( characterLock == false && isInited == true)
+		if (characterLock == false && isInited == true)
 		{
 			CameraControl( );
 			PlayerMovementControl( );
-		}
-
-		// 测试换枪
-		 if (Input.GetKeyDown(KeyCode.K))
-		{
-			Debug.Log("Input.GetKeyDown(KeyCode.K)");
-			ChangeWeapon( new ChangeWeapon( WeaponType.Weapon_AK ) );
 		}
 	}
 
 	// 控制相机视角转动
 	private void CameraControl( )
 	{
+		float smoothing = SettingManager.Inst.GetSmoothing();
 		Vector2 mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
 		mouseDelta = Vector2.Scale(mouseDelta, new Vector2(sensitivity * smoothing, sensitivity * smoothing));
@@ -124,7 +117,6 @@ public class PlayerControllor : MonoBehaviour
 	// 控制角色移动
 	private void PlayerMovementControl( )
 	{
-
 		if (Input.GetKey(KeyCode.LeftShift))
         {
             CurrentSpeed = RunSpeed;
@@ -186,6 +178,7 @@ public class PlayerControllor : MonoBehaviour
 		//这里是在计算重力下坠
 		movementDirection.y -= gravity * Time.deltaTime;
 		var tmp_Movement = CurrentSpeed * movementDirection;
+		Debug.Log("tmp_Movement = " + tmp_Movement + " movementDirection.y = " + movementDirection.y);
 		characterController.Move(tmp_Movement);
 
 		//Debug.Log("characterAnimator" + characterAnimator);

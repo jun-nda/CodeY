@@ -19,7 +19,6 @@ namespace GameData
 		public void AddWeapon( WeaponType weapon )
 		{
 			weapons.Add(weapon);
-
 		}
 
 		public void RemoveSelectedWeapon( )
