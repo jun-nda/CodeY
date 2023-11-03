@@ -28,6 +28,7 @@ public abstract class Weapon : MonoBehaviour,IWeapon {
 	protected void Awake () {
 		m_CurrentAmmo = m_AmmoEach;
 		m_CurrentAmmoAll = m_AmmoAll;
+		m_GunAnimator = transform.Find("Weapon").GetComponent<Animator>();
 	}
 
 

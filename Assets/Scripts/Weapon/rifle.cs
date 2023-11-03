@@ -8,16 +8,16 @@ public class rifle : Weapon {
 	public override void OpenFire () {
 		if (m_CurrentAmmo <= 0) return;
 		if (!IsAllowShooting()) return;
+		
 		m_MuzzleParticle.Play();
-		// CurrentAmmo -= 1;
-		//
-		// GunAnimator.Play("Fire", IsAiming ? 1 : 0, 0);
+		m_CasingParticle.Play();
+		
+		m_GunAnimator.Play("Fire", 1, 0);
 		//
 		// FirearmsShootingAudioSource.clip = FirearmsAudioData.ShootingAudio;
 		// FirearmsShootingAudioSource.Play();
 		//
 		// CreateBullet();
-		// CasingParticle.Play();
 		// mouseLook.FiringForTest();
 		m_CurrentAmmo--;
 		m_LastFireTime = Time.time;
@@ -46,6 +46,7 @@ public class rifle : Weapon {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetMouseButton(0)) {
+			Debug.Log("OpenFire");
 			OpenFire();
 		}
 
