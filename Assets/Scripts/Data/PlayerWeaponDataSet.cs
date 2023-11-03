@@ -16,18 +16,18 @@ namespace GameData
 		/// <summary>
 		/// 想背包中添加武器
 		/// </summary>
-		public void AddWeapon( WeaponType weapon )
+		public void AddWeapon(WeaponType weapon)
 		{
 			weapons.Add(weapon);
 		}
 
-		public void RemoveSelectedWeapon( )
+		public void RemoveSelectedWeapon()
 		{
-			if ( selectedWeaponIndex >= 0 && selectedWeaponIndex < weapons.Count )
+			if (selectedWeaponIndex >= 0 && selectedWeaponIndex < weapons.Count)
 			{
 				weapons.RemoveAt(selectedWeaponIndex);
 
-				if ( weapons.Count == 0 )
+				if (weapons.Count == 0)
 				{
 					selectedWeaponIndex = -1;
 				}
@@ -41,9 +41,9 @@ namespace GameData
 		/// <summary>
 		/// 选择武器，并发送事件
 		/// </summary>
-		public void SelectWeapon( int index )
+		public void SelectWeapon(int index)
 		{
-			if ( index > 0 && index <= weapons.Count )
+			if (index > 0 && index <= weapons.Count)
 			{
 				selectedWeaponIndex = index - 1;
 				EventManager.SendMessage(new ChangeWeapon(weapons[selectedWeaponIndex]));
@@ -53,18 +53,18 @@ namespace GameData
 		/// <summary>
 		/// 选择下一把
 		/// </summary>
-		public void SelectNextWeapon( )
+		public void SelectNextWeapon()
 		{
-			int nextIndex = ( selectedWeaponIndex + 1 ) % weapons.Count;
+			int nextIndex = (selectedWeaponIndex + 1) % weapons.Count;
 			SelectWeapon(nextIndex);
 		}
-		
+
 		/// <summary>
 		/// 选择上一把
 		/// </summary>
-		public void SelectPreviousWeapon( )
+		public void SelectPreviousWeapon()
 		{
-			int previousIndex = ( selectedWeaponIndex - 1 + weapons.Count ) % weapons.Count;
+			int previousIndex = (selectedWeaponIndex - 1 + weapons.Count) % weapons.Count;
 			SelectWeapon(previousIndex);
 		}
 	}

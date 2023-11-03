@@ -40,7 +40,6 @@ public class GameControllor : MonoBehaviour
 		InputManager.OnAlpha2KeyDown += OnAlpha2KeyDown;
 	}
 
-	// TODO 在playerControllor里面把枪械，手臂模型摘出来，做成动态加载
 	public void StartGame(object eventData)
 	{
 		Debug.Log("============StartGame=============");

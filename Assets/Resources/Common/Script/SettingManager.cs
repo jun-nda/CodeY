@@ -13,11 +13,11 @@ namespace GameData
 		// 其他设置项...
 	}
 
+	/// <summary>
+	/// SettingManager 用来管理玩家设置
+	/// </summary>
 	public partial class SettingManager : Singleton<SettingManager>
 	{
-		/// <summary>
-		/// 获取鼠标灵敏度
-		/// </summary>
 		private Setting _settings;
 
 		/// <summary>
@@ -27,11 +27,11 @@ namespace GameData
 		{
 			if (File.Exists(Application.dataPath + "/FpsSetting.json"))
 			{
-				LoadSettingData();
+				LoadSettingData( );
 			}
 			else
 			{
-				_settings = new();
+				_settings = new( );
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace GameData
 		public void LoadSettingData()
 		{
 			string fileName = "FpsSetting";
-           _settings  = Storage.ReadDataFromFile<Setting>(fileName);
+			_settings = Storage.ReadDataFromFile<Setting>(fileName);
 		}
 	}
 }
