@@ -76,8 +76,8 @@ MonoBehaviour:
   sensitivity: 5
   gravity: 9.8
   jumpHeight: 2
-  WalkSpeed: 0.02
-  RunSpeed: 0.04
+  WalkSpeed: 0.04
+  RunSpeed: 0.08
   PlayerObj: {fileID: 4845204737757943169}
   OtherPlayerObj: {fileID: 6551534389351781623}
 --- !u!1 &7593979898759506258
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 538759658495277032}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

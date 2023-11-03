@@ -250,6 +250,14 @@ namespace Common.UIScript
             */
         }
 
+
+        public void ResetMainCamera(Camera camera)
+		{
+            mainCamera = Camera.main;
+            var cameraData = mainCamera.GetComponent<UniversalAdditionalCameraData>();
+            cameraData.cameraStack.Add(uiCamera);
+		}
+
         public override string ToString()
         {
             var sb = new StringBuilder();

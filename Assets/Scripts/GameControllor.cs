@@ -6,9 +6,10 @@ using GameConfig;
 
 public class GameControllor : MonoBehaviour
 {
-	[SerializeField] private PlayerControllor playerControllor;
+	//[SerializeField] private PlayerControllor playerControllor;
 	[SerializeField] private InputManager inputManager;
 	[SerializeField] private GameObject InitImageBg;
+	[SerializeField] private Camera MianCamera;
 
 	///创建玩家背包
 	private WeaponBackPack playerWeaponBackPack = new WeaponBackPack( );
@@ -51,10 +52,21 @@ public class GameControllor : MonoBehaviour
 
 	public void CreatePlayer()
 	{
+		MianCamera.gameObject.SetActive(false);
+
 		playerWeaponBackPack.AddWeapon(WeaponType.Weapon_AK);
 		playerWeaponBackPack.AddWeapon(WeaponType.Weapon_PSM);
 
-		playerControllor.Init( );
+		//playerControllor.Init( );
+		Debug.Log("=======CreatePlayer=======");
+		var player = ResManager.InstantiateGameObjectSync("Prefabs/Player");
+		player.transform.SetParent(this.transform);
+
+		var script = player.GetComponent<PlayerControllor222>( );
+		script.Init();
+
+		// 重设主摄像机，将UIcamera渲染到主摄像机上
+		PanelManager.Inst.ResetMainCamera(script.playerCamera);
 	}
 
 	public void OnEscapeKeyDown()
