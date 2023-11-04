@@ -13,11 +13,11 @@ public class rifle : Weapon {
 		m_CasingParticle.Play();
 		
 		m_GunAnimator.Play("Fire", 1, 0);
-		//
+
+		CreateTrajectory();
 		// FirearmsShootingAudioSource.clip = FirearmsAudioData.ShootingAudio;
 		// FirearmsShootingAudioSource.Play();
-		//
-		// CreateBullet();
+
 		// mouseLook.FiringForTest();
 		m_CurrentAmmo--;
 		m_LastFireTime = Time.time;
@@ -54,5 +54,14 @@ public class rifle : Weapon {
 		{
 			Reload();
 		}
+	}
+
+
+	protected void CreateTrajectory () {
+		GameObject tmp_Trajectory = Instantiate(BulletPrefab, m_MuzzlePos.position, m_MuzzlePos.rotation);
+		// tmp_Trajectory.transform.SetParent(m_MuzzlePos.parent);
+		Rigidbody tmp_TrajectoryRigidBody = tmp_Trajectory.AddComponent<Rigidbody>();
+		// tmp_TrajectoryRigidBody.useGravity = false;
+		tmp_TrajectoryRigidBody.velocity = (m_MuzzlePos.position - m_EjectionPos.position) * 1000f;
 	}
 }
