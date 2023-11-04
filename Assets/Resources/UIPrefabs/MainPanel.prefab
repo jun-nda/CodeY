@@ -196,6 +196,7 @@ MonoBehaviour:
       disableMainCameraType: 0
   WeaponBackPackContainer: {fileID: 7014531409768582975}
   WeaponBackPackItem: {fileID: 1728235871648521126}
+  SightBead: {fileID: 4983862448006280121}
   toggleGroup: {fileID: 5142378043624172294}
 --- !u!1 &1728235871648521126
 GameObject:

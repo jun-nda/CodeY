@@ -7,6 +7,7 @@ public class GameUI : PanelBase
 {
 	public GameObject WeaponBackPackContainer;
 	public GameObject WeaponBackPackItem;
+	public GameObject SightBead;
 	public ToggleGroup toggleGroup;
 
 	private readonly float itemScale = 1;
@@ -17,7 +18,9 @@ public class GameUI : PanelBase
 	{
 		/// 换枪事件
 		EventManager.AddListener<ChangeWeapon>(OnChangeWeapon);
-
+		
+		// 瞄准事件
+		EventManager.AddListener<AimingEventArgs>(OnAiming);
 		// 背包的枪械换掉时需要重新刷一遍列表
 	}
 
@@ -52,6 +55,11 @@ public class GameUI : PanelBase
 		toggleToSelect.isOn = true; // 设置指定 Toggle 的选中状态为 true
 	}
 
+	public void OnAiming (AimingEventArgs eventData) {
+		bool isAiming = eventData.IsAiming;
+		SightBead.SetActive(!isAiming);
+	}
+	
 	public void OnDestroy()
 	{
 

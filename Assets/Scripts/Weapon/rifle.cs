@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Common.UIScript;
 using UnityEngine;
 // using Input = UnityEngine.Windows.Input;
 
 public class rifle : Weapon {
-
+	protected IEnumerator m_doAimCoroutine;
 	public override void OpenFire () {
 		if (m_CurrentAmmo <= 0) return;
 		if (!IsAllowShooting()) return;
@@ -12,7 +13,7 @@ public class rifle : Weapon {
 		m_MuzzleParticle.Play();
 		m_CasingParticle.Play();
 		
-		m_GunAnimator.Play("Fire", 1, 0);
+		m_GunAnimator.Play("Fire", m_IsAiming ? 1 : 0, 0);
 
 		CreateTrajectory();
 		// FirearmsShootingAudioSource.clip = FirearmsAudioData.ShootingAudio;
@@ -51,6 +52,28 @@ public class rifle : Weapon {
 			m_CurrentAmmoAll = 0;
 		}
 	}
+
+	protected override void Aiming (bool isAiming) {
+		m_IsAiming = isAiming;
+		m_GunAnimator.SetBool("Aim", m_IsAiming);
+		
+		EventManager.SendMessage(new AimingEventArgs(isAiming));
+		
+		// 反复开镜的时候，不把协程停掉的话，协程始终是执行完毕的状态，所以需要先停掉然后重新起一个
+		if (m_doAimCoroutine == null)
+		{
+			m_doAimCoroutine = DoAim();
+			StartCoroutine(m_doAimCoroutine);
+		}
+		else
+		{
+			StopCoroutine(m_doAimCoroutine);
+			m_doAimCoroutine = null;
+			m_doAimCoroutine = DoAim();
+			StartCoroutine(m_doAimCoroutine);
+		}
+
+	}
 	
 	// Start is called before the first frame update
 	void Start () {
@@ -60,14 +83,21 @@ public class rifle : Weapon {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetMouseButton(0)) {
-			Debug.Log("OpenFire");
 			OpenFire();
 		}
-
+		if (Input.GetMouseButtonDown(1)) {
+			Aiming(true);
+		}
+		if (Input.GetMouseButtonUp(1))
+		{
+			Aiming(false);
+		}
 		if (Input.GetKeyDown(KeyCode.R))
 		{
 			Reload();
 		}
+		
+
 	}
 
 
@@ -89,6 +119,15 @@ public class rifle : Weapon {
 					yield break;
 				}
 			}
+		}
+	}
+
+	protected IEnumerator DoAim () {
+		while (true) {
+			yield return null;
+	
+			float temp_CurentFOV = 0;
+			m_EyeCamera.fieldOfView = Mathf.SmoothDamp(m_EyeCamera.fieldOfView, m_IsAiming ? 45 : m_EyeOriginFOV, ref temp_CurentFOV, Time.deltaTime * 2);
 		}
 	}
 }
