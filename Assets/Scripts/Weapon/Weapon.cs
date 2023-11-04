@@ -14,7 +14,8 @@ public abstract class Weapon : MonoBehaviour,IWeapon {
 	public ParticleSystem m_CasingParticle; // 弹壳特效
 	
 	protected Animator m_GunAnimator;
-
+	protected AnimatorStateInfo m_GunAnimatorState;
+	
 	public GameObject BulletPrefab;
 
 	public float m_FireRate;

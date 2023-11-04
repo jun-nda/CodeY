@@ -25,7 +25,21 @@ public class rifle : Weapon {
 	
 	protected override void  Reload ()
 	{
-		if (m_CurrentAmmoAll <= 0) return;
+		m_GunAnimatorState = m_GunAnimator.GetCurrentAnimatorStateInfo(2);
+		if (m_GunAnimatorState.IsTag("ReloadAmmo")) {
+			if (m_GunAnimatorState.normalizedTime > 0.0f) {
+				return;
+			}
+		}
+		if (m_CurrentAmmo == m_AmmoEach) {
+			return;
+		}
+		
+		m_GunAnimator.Play(m_CurrentAmmoAll <= 0 ? "Reload_Left" : "Reload_OutOf", 2, 0);
+		StartCoroutine(CheckReloadAnimationEnd());
+	}
+
+	protected void ReloadData () {
 		if ( m_CurrentAmmoAll +  m_CurrentAmmo >= m_AmmoEach)
 		{
 			m_CurrentAmmoAll -= m_AmmoEach - m_CurrentAmmo;
@@ -63,5 +77,18 @@ public class rifle : Weapon {
 		Rigidbody tmp_TrajectoryRigidBody = tmp_Trajectory.AddComponent<Rigidbody>();
 		// tmp_TrajectoryRigidBody.useGravity = false;
 		tmp_TrajectoryRigidBody.velocity = (m_MuzzlePos.position - m_EjectionPos.position) * 1000f;
+	}
+
+	protected IEnumerator CheckReloadAnimationEnd () {
+		while (true) {
+			yield return null;
+			m_GunAnimatorState = m_GunAnimator.GetCurrentAnimatorStateInfo(2);
+			if (m_GunAnimatorState.IsTag("ReloadAmmo")) {
+				if (m_GunAnimatorState.normalizedTime > 0.95) {
+					ReloadData();
+					yield break;
+				}
+			}
+		}
 	}
 }
