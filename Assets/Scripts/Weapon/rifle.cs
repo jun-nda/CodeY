@@ -16,6 +16,7 @@ public class rifle : Weapon {
 		m_GunAnimator.Play("Fire", m_IsAiming ? 1 : 0, 0);
 
 		CreateTrajectory();
+		CreateImpactEffect();
 		// FirearmsShootingAudioSource.clip = FirearmsAudioData.ShootingAudio;
 		// FirearmsShootingAudioSource.Play();
 
@@ -99,16 +100,28 @@ public class rifle : Weapon {
 		
 
 	}
-
-
+	
 	protected void CreateTrajectory () {
-		GameObject tmp_Trajectory = Instantiate(BulletPrefab, m_MuzzlePos.position, m_MuzzlePos.rotation);
+		GameObject tmp_Trajectory = Instantiate(m_BulletPrefab, m_MuzzlePos.position, m_MuzzlePos.rotation);
 		// tmp_Trajectory.transform.SetParent(m_MuzzlePos.parent);
 		Rigidbody tmp_TrajectoryRigidBody = tmp_Trajectory.AddComponent<Rigidbody>();
 		// tmp_TrajectoryRigidBody.useGravity = false;
 		tmp_TrajectoryRigidBody.velocity = (m_MuzzlePos.position - m_EjectionPos.position) * 1000f;
+		Destroy(tmp_Trajectory, 3);
+
 	}
 
+	protected void CreateImpactEffect () {
+		if (Physics.Raycast(m_MuzzlePos.position, (m_MuzzlePos.position - m_EjectionPos.position).normalized,
+			out RaycastHit tmp_Hit)) {
+			var tmp_BulletEffect =
+				Instantiate(m_ImpactPrefab,
+					tmp_Hit.point,
+					Quaternion.LookRotation(tmp_Hit.normal, Vector3.up));
+			Destroy(tmp_BulletEffect, 3);
+		}
+	}
+	
 	protected IEnumerator CheckReloadAnimationEnd () {
 		while (true) {
 			yield return null;

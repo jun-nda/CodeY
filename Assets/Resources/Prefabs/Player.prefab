@@ -130,7 +130,8 @@ MonoBehaviour:
   m_EjectionPos: {fileID: 4845204737758169487}
   m_MuzzleParticle: {fileID: 3037335353732095058}
   m_CasingParticle: {fileID: 2164274945962375684}
-  BulletPrefab: {fileID: 1086664671600574, guid: 5953171a59c27394e9ad5cbb564affa8, type: 3}
+  m_BulletPrefab: {fileID: 1086664671600574, guid: 5953171a59c27394e9ad5cbb564affa8, type: 3}
+  m_ImpactPrefab: {fileID: 1879272669879180, guid: 7bef351ddc33ae044b671a7664396a20, type: 3}
   m_FireRate: 11.7
   m_AmmoEach: 30
   m_AmmoAll: 120

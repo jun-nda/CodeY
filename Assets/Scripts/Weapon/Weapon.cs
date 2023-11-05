@@ -16,8 +16,8 @@ public abstract class Weapon : MonoBehaviour,IWeapon {
 	protected Animator m_GunAnimator;
 	protected AnimatorStateInfo m_GunAnimatorState;
 	
-	public GameObject BulletPrefab;
-
+	public GameObject m_BulletPrefab;
+	public GameObject m_ImpactPrefab;
 	public float m_FireRate;
 	protected float m_LastFireTime = 0f;
 
@@ -45,5 +45,10 @@ public abstract class Weapon : MonoBehaviour,IWeapon {
 	protected abstract void Aiming (bool isAiming);
 	protected bool IsAllowShooting () {
 		return Time.time - m_LastFireTime > 1 / m_FireRate;
+	}
+
+	protected void FixedUpdate () {
+		// 击中贴花
+		
 	}
 }
