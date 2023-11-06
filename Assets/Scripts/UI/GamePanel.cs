@@ -9,10 +9,16 @@ public class GameUI : PanelBase
 	public GameObject WeaponBackPackItem;
 	public GameObject SightBead;
 	public ToggleGroup toggleGroup;
+	public GameObject frontSight;
 
 	private readonly float itemScale = 1;
 
 	private WeaponBackPack weaponBackPack;
+
+	private float sightSize = 1f;
+	private float curSize = 1f;
+	private float walkTargetSize = 2f;
+	private float runTargetSize = 2.5f;
 
 	void Start()
 	{
@@ -29,6 +35,30 @@ public class GameUI : PanelBase
 		//playerWeaponBackPack.weapons;
 		weaponBackPack = playerWeaponBackPack;
 		Refresh( );
+	}
+
+	/// <summary>
+	/// 准星动态变化
+	/// </summary>
+	public void Update()
+	{
+		float speed = DataManager.Inst.GetPlayerSpeed( );
+
+		if (speed > 0.01f && speed < 0.05f)
+		{
+			curSize = Mathf.Lerp(curSize, walkTargetSize, Time.deltaTime * 5);
+		}
+		else if (speed > 0.05f)
+		{
+			curSize = Mathf.Lerp(curSize, runTargetSize, Time.deltaTime * 5);
+		}
+		else
+		{
+			curSize = Mathf.Lerp(curSize, sightSize, Time.deltaTime * 5);
+		}
+
+		RectTransform rectTransform = frontSight.GetComponent<RectTransform>( );
+		rectTransform.sizeDelta = new Vector2(100 * curSize, 100 * curSize);
 	}
 
 	void Refresh()

@@ -187,7 +187,8 @@ public class PlayerControllor222 : MonoBehaviour
 		movementDirection.y -= gravity * Time.deltaTime;
 		var tmp_Movement = CurrentSpeed * movementDirection;
 		characterController.Move(tmp_Movement);
-
+		
+		DataManager.Inst.SetPlayerSpeed(tmp_Movement.magnitude);
 		//Debug.Log("UpdateMoveMent   " + forwardDirection.magnitude + " tmp_Movement = " + tmp_Movement);
 		if (characterAnimator != null)
 		{

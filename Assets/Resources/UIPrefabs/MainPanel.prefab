@@ -198,6 +198,7 @@ MonoBehaviour:
   WeaponBackPackItem: {fileID: 1728235871648521126}
   SightBead: {fileID: 4983862448006280121}
   toggleGroup: {fileID: 5142378043624172294}
+  frontSight: {fileID: 4983862448006280121}
 --- !u!1 &1728235871648521126
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,10 +341,10 @@ RectTransform:
   m_Father: {fileID: 3466816811013008963}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 34.999996, y: 0.0029945}
-  m_SizeDelta: {x: 30, y: 5}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -15.000004, y: 0.0029945}
+  m_SizeDelta: {x: 30, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8997320777683155868
 CanvasRenderer:
@@ -416,10 +417,10 @@ RectTransform:
   m_Father: {fileID: 3466816811013008963}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 35.3}
-  m_SizeDelta: {x: 30, y: 5}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -14.700001}
+  m_SizeDelta: {x: 30, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9022699153842532889
 CanvasRenderer:
@@ -492,10 +493,10 @@ RectTransform:
   m_Father: {fileID: 3466816811013008963}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -35, y: 0.0029945}
-  m_SizeDelta: {x: 30, y: 5}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 15, y: 0.0029945374}
+  m_SizeDelta: {x: 30, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7481030989529912710
 CanvasRenderer:
@@ -767,10 +768,10 @@ RectTransform:
   m_Father: {fileID: 3466816811013008963}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -34.8}
-  m_SizeDelta: {x: 30, y: 5}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 15.200001}
+  m_SizeDelta: {x: 30, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4320171431400957189
 CanvasRenderer:
@@ -820,7 +821,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3466816811013008963}
   m_Layer: 5
-  m_Name: mainPoint
+  m_Name: frontSight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
