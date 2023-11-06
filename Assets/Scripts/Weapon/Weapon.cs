@@ -1,7 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Common.UIScript;
 
 public abstract class Weapon : MonoBehaviour,IWeapon {
 	
@@ -31,6 +30,10 @@ public abstract class Weapon : MonoBehaviour,IWeapon {
 	protected bool m_IsAiming;
 	public Camera m_EyeCamera;
 	protected float m_EyeOriginFOV;
+
+	
+	// 子弹抛壳对象池
+    public Dictionary<int, PoolManager.PoolItem> bulletObjs;
 	
 	protected void Awake () {
 		m_CurrentAmmo = m_AmmoEach;
