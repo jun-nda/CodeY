@@ -160,6 +160,7 @@ public class PlayerControllor222 : MonoBehaviour
 
 			// 计算摄像机在水平方向上的移动距离
 			movementDirection = forwardDirection + rightDirection;
+			movementDirection.Normalize();
 		}
 
 		UpdateMoveMent();
@@ -188,7 +189,7 @@ public class PlayerControllor222 : MonoBehaviour
 		var tmp_Movement = CurrentSpeed * movementDirection;
 		characterController.Move(tmp_Movement);
 		
-		DataManager.Inst.SetPlayerSpeed(tmp_Movement.magnitude);
+		DataManager.Inst.CaharacterSpeed = tmp_Movement.magnitude;
 		//Debug.Log("UpdateMoveMent   " + forwardDirection.magnitude + " tmp_Movement = " + tmp_Movement);
 		if (characterAnimator != null)
 		{

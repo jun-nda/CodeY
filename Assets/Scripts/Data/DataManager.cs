@@ -11,6 +11,7 @@ namespace GameData
 	{
         private Dictionary<WeaponType, WeaponData> weaponDatas = new();
         public float CaharacterSpeed = 0f;
+
         // 不要了
         /// <summary>
         /// 根据武器的type获取武器的prefab路径
@@ -38,16 +39,6 @@ namespace GameData
 			weaponDatas.Add(WeaponType.Weapon_M4, M4Data);
 		}
 
-        public void SetPlayerSpeed(float speed)
-		{
-            CaharacterSpeed = speed;
-		}
-        
-        public float GetPlayerSpeed()
-		{
-            return CaharacterSpeed;
-		}
-        
 		/// <summary>
 		/// 根据WeaponType获取数据信息
 		/// </summary>

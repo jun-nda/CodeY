@@ -42,13 +42,13 @@ public class GameUI : PanelBase
 	/// </summary>
 	public void Update()
 	{
-		float speed = DataManager.Inst.GetPlayerSpeed( );
+		float caharacterSpeed = DataManager.Inst.CaharacterSpeed;
 
-		if (speed > 0.01f && speed < 0.05f)
+		if (caharacterSpeed > 0.01f && caharacterSpeed < 0.05f)
 		{
 			curSize = Mathf.Lerp(curSize, walkTargetSize, Time.deltaTime * 5);
 		}
-		else if (speed > 0.05f)
+		else if (caharacterSpeed > 0.05f)
 		{
 			curSize = Mathf.Lerp(curSize, runTargetSize, Time.deltaTime * 5);
 		}
@@ -85,11 +85,12 @@ public class GameUI : PanelBase
 		toggleToSelect.isOn = true; // 设置指定 Toggle 的选中状态为 true
 	}
 
-	public void OnAiming (AimingEventArgs eventData) {
+	public void OnAiming(AimingEventArgs eventData)
+	{
 		bool isAiming = eventData.IsAiming;
 		SightBead.SetActive(!isAiming);
 	}
-	
+
 	public void OnDestroy()
 	{
 
