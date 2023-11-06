@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class rifle : Weapon {
 	protected IEnumerator m_doAimCoroutine;
+	private LineRenderer m_LineRenderer; // 线渲染器
 	public override void OpenFire () {
 		if (m_CurrentAmmo <= 0) return;
 		if (!IsAllowShooting()) return;
@@ -78,7 +79,8 @@ public class rifle : Weapon {
 	
 	// Start is called before the first frame update
 	void Start () {
-
+		// 获取线渲染器组件
+        m_LineRenderer = GetComponent<LineRenderer>();
 	}
 
 	// Update is called once per frame
@@ -98,7 +100,21 @@ public class rifle : Weapon {
 			Reload();
 		}
 		
+		// 创建射线
+        Ray ray = new Ray(m_EjectionPos.position, (m_MuzzlePos.position - m_EjectionPos.position).normalized);
 
+        // 更新线渲染器的起点和终点
+        m_LineRenderer.SetPosition(0, m_EjectionPos.position);
+        m_LineRenderer.SetPosition(1, m_EjectionPos.position + (m_MuzzlePos.position - m_EjectionPos.position).normalized * 100f);
+
+
+        // 如果射线与物体相交，则在终点处显示一个小球
+        //RaycastHit hit;
+        //if (Physics.Raycast(ray, out hit))
+        //{
+        //    GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        //    sphere.transform.position = hit.point;
+        //}
 	}
 	
 	protected void CreateTrajectory () {
@@ -108,7 +124,6 @@ public class rifle : Weapon {
 		// tmp_TrajectoryRigidBody.useGravity = false;
 		tmp_TrajectoryRigidBody.velocity = (m_MuzzlePos.position - m_EjectionPos.position) * 1000f;
 		Destroy(tmp_Trajectory, 3);
-
 	}
 
 	protected void CreateImpactEffect () {

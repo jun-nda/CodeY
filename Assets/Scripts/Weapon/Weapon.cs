@@ -40,7 +40,6 @@ public abstract class Weapon : MonoBehaviour,IWeapon {
 
 	}
 
-
 	protected abstract void Reload ();
 	protected abstract void Aiming (bool isAiming);
 	protected bool IsAllowShooting () {
