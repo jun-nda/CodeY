@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Common.UIScript;
 using UnityEngine;
+using GameData;
 
 public class rifle : Weapon
 {
@@ -11,6 +12,11 @@ public class rifle : Weapon
 	/// 测试用的枪线渲染器
 	/// </summary>
 	private LineRenderer m_LineRenderer;
+
+	public void SetData(WeaponData data)
+	{
+
+	}
 
 	public override void OpenFire()
 	{

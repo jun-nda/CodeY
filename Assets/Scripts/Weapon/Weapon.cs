@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Common.UIScript;
+using GameData;
 
 public abstract class Weapon : MonoBehaviour,IWeapon {
 	
@@ -25,6 +26,8 @@ public abstract class Weapon : MonoBehaviour,IWeapon {
 	public int m_AmmoAll = 120;
 	protected int m_CurrentAmmo;
 	protected int m_CurrentAmmoAll;
+
+	public WeaponData data;
 	
 	// 瞄准
 	protected bool m_IsAiming;
@@ -44,13 +47,17 @@ public abstract class Weapon : MonoBehaviour,IWeapon {
 	}
 
 	protected abstract void Reload ();
+
 	protected abstract void Aiming (bool isAiming);
-	protected bool IsAllowShooting () {
+
+	protected bool IsAllowShooting()
+	{
 		return Time.time - m_LastFireTime > 1 / m_FireRate;
 	}
 
-	protected void FixedUpdate () {
+	protected void FixedUpdate()
+	{
 		// 击中贴花
-		
+
 	}
 }

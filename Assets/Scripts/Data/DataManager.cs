@@ -9,6 +9,7 @@ namespace GameData
     /// </summary>
 	public partial class DataManager : Singleton<DataManager>
 	{
+        private Dictionary<WeaponType, WeaponData> weaponDatas = new();
         // 不要了
         /// <summary>
         /// 根据武器的type获取武器的prefab路径
@@ -28,5 +29,26 @@ namespace GameData
                     return "";
             }
         }
+
+        public void Init()
+		{
+            WeaponData M4Data = new( WeaponType.Weapon_M4, 30, 120, 11.7f );
+
+			weaponDatas.Add(WeaponType.Weapon_M4, M4Data);
+		}
+
+        
+		/// <summary>
+		/// 根据WeaponType获取数据信息
+		/// </summary>
+		public WeaponData GetWeaponByType(WeaponType type)
+		{
+			if (weaponDatas.ContainsKey(type))
+			{
+				return weaponDatas[type];
+			}
+
+			return null;
+		}
 	}
 }

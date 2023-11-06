@@ -31,8 +31,8 @@ public class GameControllor : MonoBehaviour
 		PanelManager.Inst.PushPanel<GameStartPanel>("UIPrefabs/GameStartPanel");
 
 		ConfigManager.Inst.Init( );
-
-		SettingManager.Inst.Init();
+		DataManager.Inst.Init( );
+		SettingManager.Inst.Init( );
 
 		InputManager.OnEscapeKeyDown += OnEscapeKeyDown;
 		InitImageBg.SetActive(false);

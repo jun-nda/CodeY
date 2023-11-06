@@ -21,21 +21,23 @@ public class PlayerControllor222 : MonoBehaviour
 	/// </summary>
 	private bool characterLock = true;
 
-	[SerializeField] public Camera playerCamera;
-	public float sensitivity = 5.0f;
-	public float gravity;
-	public float jumpHeight;
+	[SerializeField]
+	public Camera playerCamera;
+	public GameObject PlayerObj;
+	public GameObject OtherPlayerObj;
+
+	/// <summary>
+	/// 一些配置
+	/// </summary>
+	private readonly float sensitivity = 5.0f;
+	private readonly float gravity = 9.8f;
+	private readonly float jumpHeight = 2f;
+	private readonly float WalkSpeed = 0.04f;
+	private readonly float RunSpeed = 0.08f;
 
 	private Vector3 movementDirection;
 	private Vector2 mouseLook;
 	private Vector2 smoothV;
-
-	public float WalkSpeed;
-	public float RunSpeed;
-
-
-	public GameObject PlayerObj;
-	public GameObject OtherPlayerObj;
 
 	public float CurrentSpeed { get; private set; }
 
@@ -196,58 +198,6 @@ public class PlayerControllor222 : MonoBehaviour
 		else
 		{
 			characterAnimator = GetComponentInChildren<Animator>( );
-		}
-	}
-
-	/// <summary>
-	/// 加载枪械，重设Weapon以及characterAnimator 参数是枪械的路径
-	/// </summary>
-	public void LoadWeapon( string str )
-	{
-		characterAnimator = null;
-        Weapon = ResManager.InstantiateGameObjectSync(str);
-        Weapon.transform.SetParent(playerCamera.transform);
-		Weapon.transform.localScale = new Vector3(1, 1, 1);
-		
-		Debug.Log("1111111LoadWeapon1111" + characterAnimator);
-		characterAnimator = GetComponentInChildren<Animator>( );
-		Debug.Log("==========LoadWeapon=============" + characterAnimator);
-	}
-
-	/// <summary>
-	/// 换枪，没有武器就拿默认的，有武器先执行PickDown
-	/// </summary>
-	public void ChangeWeapon( ChangeWeapon eventData )
-	{
-		string weaponName = DataManager.Inst.GetWeaponTypeString( eventData.WeaponType );
-		// 当前没有武器
-		if ( Weapon == null )
-		{
-			LoadWeapon( weaponName );
-			NextWeapon = null;
-		}
-		else
-		{
-			NextWeapon = weaponName;
-			characterAnimator.Play("PickDown");
-		}
-	}
-
-	/// <summary>
-	/// 收枪结束，要是有要拿的下一把枪就拿
-	/// </summary>
-	public void PickDownWeaponFinished( WeaponPickDownFinished EventData )
-	{
-		if ( Weapon != null )
-		{
-			GameObject.Destroy(Weapon);
-			characterAnimator = null;
-		}
-
-		if ( NextWeapon != null )
-		{
-			LoadWeapon( NextWeapon );
-			NextWeapon = null;
 		}
 	}
 }
