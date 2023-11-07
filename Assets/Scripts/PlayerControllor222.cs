@@ -23,6 +23,7 @@ public class PlayerControllor222 : MonoBehaviour
 
 	[SerializeField]
 	public Camera playerCamera;
+	public GameObject WeaponHolder;
 	public GameObject PlayerObj;
 	public GameObject OtherPlayerObj;
 
@@ -31,8 +32,11 @@ public class PlayerControllor222 : MonoBehaviour
 	/// </summary>
 	private readonly float gravity = 9.8f;
 	private readonly float jumpHeight = 2f;
+	private readonly float AnimSpeed = 0.02f;
 	private readonly float WalkSpeed = 0.04f;
 	private readonly float RunSpeed = 0.08f;
+
+	private Weapon weaponHolder;
 
 	public float CurrentSpeed { get; private set; }
 
@@ -65,6 +69,8 @@ public class PlayerControllor222 : MonoBehaviour
 		isInited = true;
 
 		SetCharacterLockState(new CaharacterPause(false));
+
+		weaponHolder = WeaponHolder.GetComponent<Weapon>();
 	}
 
 	/// <summary>
@@ -105,15 +111,20 @@ public class PlayerControllor222 : MonoBehaviour
 	private void PlayerMovementControl( )
 	{
 		if (Input.GetKey(KeyCode.LeftShift))
-        {
-            CurrentSpeed = RunSpeed;
-        }
+		{
+			CurrentSpeed = RunSpeed;
+		}
 		else
 		{
 			CurrentSpeed = WalkSpeed;
 		}
 
-		if ( characterController.isGrounded )
+		if (weaponHolder.GetIsAnim( ))
+		{
+			CurrentSpeed = AnimSpeed;
+		}
+
+		if (characterController.isGrounded)
 		{
 			tmp_Horizontal = Input.GetAxis("Horizontal");
 			tmp_Vertical = Input.GetAxis("Vertical");

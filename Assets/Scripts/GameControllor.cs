@@ -12,7 +12,7 @@ public class GameControllor : MonoBehaviour
 	[SerializeField] private Camera MianCamera;
 
 	///创建玩家背包
-	private WeaponBackPack playerWeaponBackPack = new WeaponBackPack( );
+	private WeaponBackPack playerWeaponBackPack = new( );
 
 	//private bool MianUIOpend = true;
 

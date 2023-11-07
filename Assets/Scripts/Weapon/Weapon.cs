@@ -57,6 +57,11 @@ public abstract class Weapon : MonoBehaviour,IWeapon {
 		return Time.time - m_LastFireTime > 1 / m_FireRate;
 	}
 
+	public bool GetIsAnim()
+	{
+		return m_IsAiming;
+	}
+
 	protected void FixedUpdate()
 	{
 		// 击中贴花

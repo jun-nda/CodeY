@@ -72,7 +72,6 @@ public class CameraSpring : MonoBehaviour
 		cameraRotation.y += tmp_MouseX * smoothing;
 		cameraRotation.x -= tmp_MouseY * smoothing;
 
-		Debug.Log("currentRecoil = " + currentRecoil);
 		cameraRotation.y += currentRecoil.y;
 		cameraRotation.x -= currentRecoil.x;
 
@@ -85,7 +84,6 @@ public class CameraSpring : MonoBehaviour
 		currentRecoilTime += Time.deltaTime;
 		float tmp_RecoilFraction = currentRecoilTime / RecoilFadeOutTime;
 		float tmp_RecoilValue = RecoilCurve.Evaluate(tmp_RecoilFraction);
-		Debug.Log("tmp_RecoilValue = " + tmp_RecoilValue);
 		currentRecoil = Vector2.Lerp(Vector2.zero, currentRecoil, tmp_RecoilValue);
 	}
 
