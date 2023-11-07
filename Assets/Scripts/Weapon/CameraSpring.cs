@@ -28,6 +28,14 @@ public class CameraSpring : MonoBehaviour
 
 	}
 
+	/// <summary>
+	/// TODO 将后坐力参数传入 MinRecoilRange MaxRecoilRange
+	/// </summary>
+	public void SetData()
+	{
+
+	}
+
 	public void SetCharacterLockState(CaharacterPause eventData)
 	{
 		isLock = eventData.Value;

@@ -34,10 +34,6 @@ public class PlayerControllor222 : MonoBehaviour
 	private readonly float WalkSpeed = 0.04f;
 	private readonly float RunSpeed = 0.08f;
 
-    private float currentRecoilTime;
-    private Vector2 currentRecoil;
-
-
 	public float CurrentSpeed { get; private set; }
 
 	private Vector3 forwardDirection;
@@ -101,11 +97,9 @@ public class PlayerControllor222 : MonoBehaviour
 	{
 		if (characterLock == false && isInited == true)
 		{
-			//CameraControl( );
 			PlayerMovementControl( );
 		}
 	}
-
 
 	// 控制角色移动
 	private void PlayerMovementControl( )
