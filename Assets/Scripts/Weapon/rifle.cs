@@ -33,7 +33,7 @@ public class rifle : Weapon
 		// FirearmsShootingAudioSource.clip = FirearmsAudioData.ShootingAudio;
 		// FirearmsShootingAudioSource.Play();
 
-		// mouseLook.FiringForTest();
+		CameraSpring.Fire();
 		m_CurrentAmmo--;
 		m_LastFireTime = Time.time;
 	}

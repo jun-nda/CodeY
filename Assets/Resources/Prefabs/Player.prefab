@@ -24247,11 +24247,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 2540753922857251320}
-  sensitivity: 5
-  gravity: 9.8
-  jumpHeight: 2
-  WalkSpeed: 0.04
-  RunSpeed: 0.08
   PlayerObj: {fileID: 4845204737757943169}
   OtherPlayerObj: {fileID: 6551534389351781623}
 --- !u!1 &4845204737757943169
@@ -26657,6 +26652,7 @@ MonoBehaviour:
   m_AmmoEach: 30
   m_AmmoAll: 120
   m_EyeCamera: {fileID: 2540753922857251320}
+  CameraSpring: {fileID: 1425674514868274336}
 --- !u!120 &1957151296479606313
 LineRenderer:
   serializedVersion: 2
@@ -26804,6 +26800,7 @@ GameObject:
   - component: {fileID: 2540753922857251320}
   - component: {fileID: 8362822576235253884}
   - component: {fileID: 538759658495277032}
+  - component: {fileID: 1425674514868274336}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -26930,6 +26927,44 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &1425674514868274336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7593979898759506258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f0bac5d3b1d40948b1d216ab8406a40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RecoilFadeOutTime: 0.3
+  RecoilCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.001456446
+      value: 1.0000573
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1.0011753
+      value: 0.0017535458
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RecoilRange: {x: 0.2, y: 0}
 --- !u!1 &7869046710900155142
 GameObject:
   m_ObjectHideFlags: 0

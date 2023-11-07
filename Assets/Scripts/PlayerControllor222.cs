@@ -29,15 +29,14 @@ public class PlayerControllor222 : MonoBehaviour
 	/// <summary>
 	/// 一些配置
 	/// </summary>
-	private readonly float sensitivity = 5.0f;
 	private readonly float gravity = 9.8f;
 	private readonly float jumpHeight = 2f;
 	private readonly float WalkSpeed = 0.04f;
 	private readonly float RunSpeed = 0.08f;
 
-	private Vector3 movementDirection;
-	private Vector2 mouseLook;
-	private Vector2 smoothV;
+    private float currentRecoilTime;
+    private Vector2 currentRecoil;
+
 
 	public float CurrentSpeed { get; private set; }
 
@@ -46,6 +45,7 @@ public class PlayerControllor222 : MonoBehaviour
 
 	private float tmp_Horizontal;
 	private float tmp_Vertical;
+	private Vector3 movementDirection;
 
 	void Start( )
 	{
@@ -101,26 +101,11 @@ public class PlayerControllor222 : MonoBehaviour
 	{
 		if (characterLock == false && isInited == true)
 		{
-			CameraControl( );
+			//CameraControl( );
 			PlayerMovementControl( );
 		}
 	}
 
-	// 控制相机视角转动
-	private void CameraControl( )
-	{
-		float smoothing = SettingManager.Inst.GetSmoothing();
-		Vector2 mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
-
-		mouseDelta = Vector2.Scale(mouseDelta, new Vector2(sensitivity * smoothing, sensitivity * smoothing));
-		smoothV.x = Mathf.Lerp(smoothV.x, mouseDelta.x, 1f / smoothing);
-		smoothV.y = Mathf.Lerp(smoothV.y, mouseDelta.y, 1f / smoothing);
-		mouseLook += smoothV;
-
-		mouseLook.y = Mathf.Clamp(mouseLook.y, -60f, 90f);
-
-		playerCamera.transform.localRotation = Quaternion.Euler(-mouseLook.y, mouseLook.x, 0);
-	}
 
 	// 控制角色移动
 	private void PlayerMovementControl( )
@@ -138,15 +123,6 @@ public class PlayerControllor222 : MonoBehaviour
 		{
 			tmp_Horizontal = Input.GetAxis("Horizontal");
 			tmp_Vertical = Input.GetAxis("Vertical");
-
-			//CameraVec.x = playerCamera.transform.rotation.x;
-			//CameraVec.x = playerCamera.transform.rotation.x;
-			//Debug.Log("playerCamera " + tmp_Horizontal);
-			//movementDirection = playerCamera.transform.TransformDirection(new Vector3(tmp_Horizontal, 0, tmp_Vertical)).normalized;
-			//movementDirection.y = 0;
-
-			//Vector3 moveDirection = new Vector3(tmp_Horizontal, 0f, tmp_Vertical).normalized;
-			// TODO 奔跑 + 下蹲
 
 			forwardDirection = playerCamera.transform.forward;
 			rightDirection = playerCamera.transform.right;

@@ -38,6 +38,8 @@ public abstract class Weapon : MonoBehaviour,IWeapon {
 	// 子弹抛壳对象池
     public Dictionary<int, PoolManager.PoolItem> bulletObjs;
 	
+
+	public CameraSpring CameraSpring;
 	protected void Awake () {
 		m_CurrentAmmo = m_AmmoEach;
 		m_CurrentAmmoAll = m_AmmoAll;
