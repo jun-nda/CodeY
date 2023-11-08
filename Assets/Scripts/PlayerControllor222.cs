@@ -126,6 +126,7 @@ public class PlayerControllor222 : MonoBehaviour
 
 		if (characterController.isGrounded)
 		{
+			Debug.Log("characterController.isGrounded");
 			tmp_Horizontal = Input.GetAxis("Horizontal");
 			tmp_Vertical = Input.GetAxis("Vertical");
 
@@ -133,8 +134,8 @@ public class PlayerControllor222 : MonoBehaviour
 			rightDirection = playerCamera.transform.right;
 			forwardDirection.y = 0f;
 			rightDirection.y = 0f;
-			forwardDirection.Normalize();
-			rightDirection.Normalize();
+			//forwardDirection.Normalize();
+			//rightDirection.Normalize();
 
 			forwardDirection *= tmp_Vertical;
 			rightDirection *= tmp_Horizontal;
@@ -142,6 +143,11 @@ public class PlayerControllor222 : MonoBehaviour
 			// 计算摄像机在水平方向上的移动距离
 			movementDirection = forwardDirection + rightDirection;
 			movementDirection.Normalize();
+			Debug.Log("movementDirection = " + movementDirection);
+		}
+		else
+		{
+			movementDirection.y -= gravity * Time.deltaTime;
 		}
 
 		UpdateMoveMent();
@@ -165,13 +171,11 @@ public class PlayerControllor222 : MonoBehaviour
 	//更新移动
 	void UpdateMoveMent( )
 	{
-		//这里是在计算重力下坠
-		movementDirection.y -= gravity * Time.deltaTime;
-		var tmp_Movement = CurrentSpeed * movementDirection;
-		characterController.Move(tmp_Movement);
+        var tmp_Movement = CurrentSpeed * 100 * Time.deltaTime * movementDirection;
+		//Debug.Log("tmp_Movement = " + tmp_Movement + " deltaTime = " + Time.deltaTime + " movementDirection = " + movementDirection);
+        characterController.Move(tmp_Movement);
 		
 		DataManager.Inst.CaharacterSpeed = tmp_Movement.magnitude;
-		//Debug.Log("UpdateMoveMent   " + forwardDirection.magnitude + " tmp_Movement = " + tmp_Movement);
 		if (characterAnimator != null)
 		{
 			//Debug.Log("tmp_Movement" + tmp_Movement.magnitude);

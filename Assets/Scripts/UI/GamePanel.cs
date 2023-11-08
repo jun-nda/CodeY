@@ -44,7 +44,7 @@ public class GameUI : PanelBase
 	{
 		float caharacterSpeed = DataManager.Inst.CaharacterSpeed;
 
-		if (caharacterSpeed > 0.01f && caharacterSpeed < 0.05f)
+		if (caharacterSpeed > 0.02f && caharacterSpeed < 0.05f)
 		{
 			curSize = Mathf.Lerp(curSize, walkTargetSize, Time.deltaTime * 5);
 		}
