@@ -64,7 +64,7 @@ public class PlayerControllor222 : MonoBehaviour
 	public void Init( )
 	{
 		InputManager.OnMouseMoveDelta += HandleMouseMove;
-		InputManager.OnSpaceKeyDown += HandleSpaceKeyDown;
+		//InputManager.OnSpaceKeyDown += HandleSpaceKeyDown;
 
 		isInited = true;
 
@@ -143,12 +143,18 @@ public class PlayerControllor222 : MonoBehaviour
 			// 计算摄像机在水平方向上的移动距离
 			movementDirection = forwardDirection + rightDirection;
 			movementDirection.Normalize();
-			Debug.Log("movementDirection = " + movementDirection);
+			//Debug.Log("movementDirection = " + movementDirection);
 		}
 		else
 		{
 			movementDirection.y -= gravity * Time.deltaTime;
 		}
+
+		if (Input.GetButtonDown("Jump"))
+        {
+            movementDirection.y = jumpHeight;
+			CurrentSpeed = WalkSpeed;
+        }
 
 		UpdateMoveMent();
 	}
@@ -164,6 +170,7 @@ public class PlayerControllor222 : MonoBehaviour
 		if ( characterController.isGrounded )
 		{
 			movementDirection.y = jumpHeight;
+			CurrentSpeed = WalkSpeed;
 			UpdateMoveMent();
 		}
 	}
@@ -174,8 +181,16 @@ public class PlayerControllor222 : MonoBehaviour
         var tmp_Movement = CurrentSpeed * 100 * Time.deltaTime * movementDirection;
 		//Debug.Log("tmp_Movement = " + tmp_Movement + " deltaTime = " + Time.deltaTime + " movementDirection = " + movementDirection);
         characterController.Move(tmp_Movement);
+
+		if (characterController.isGrounded)
+		{
+			DataManager.Inst.CaharacterSpeed = tmp_Movement.magnitude > 0.02 ? CurrentSpeed : 0;
+		}
+		else
+		{
+			DataManager.Inst.CaharacterSpeed = CurrentSpeed;
+		}
 		
-		DataManager.Inst.CaharacterSpeed = tmp_Movement.magnitude;
 		if (characterAnimator != null)
 		{
 			//Debug.Log("tmp_Movement" + tmp_Movement.magnitude);

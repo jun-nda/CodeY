@@ -43,13 +43,19 @@ public class GameUI : PanelBase
 	public void Update()
 	{
 		float caharacterSpeed = DataManager.Inst.CaharacterSpeed;
-
-		if (caharacterSpeed > 0.02f && caharacterSpeed < 0.05f)
+		//Debug.Log("caharacterSpeed =  " + caharacterSpeed);
+		if (caharacterSpeed > 0.02f && caharacterSpeed < 0.045f)
 		{
+			if (curSize == walkTargetSize)
+				return;
+
 			curSize = Mathf.Lerp(curSize, walkTargetSize, Time.deltaTime * 5);
 		}
-		else if (caharacterSpeed > 0.05f)
+		else if (caharacterSpeed > 0.045f)
 		{
+			if (curSize == runTargetSize)
+				return;
+
 			curSize = Mathf.Lerp(curSize, runTargetSize, Time.deltaTime * 5);
 		}
 		else
