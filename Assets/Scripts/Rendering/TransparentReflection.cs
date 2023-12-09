@@ -49,15 +49,15 @@ public class RenderObject
 public class TransparentReflection : MonoBehaviour
 {
     [SerializeField]
-    private List<GameObject> targetObjectList = new List<GameObject>();
+    private List<GameObject> m_TargetObjectList = new List<GameObject>();
     [SerializeField]
-    private List<Renderer> invisibleRenderList = new List<Renderer>();
+    private List<Renderer> m_InvisibleRenderList = new List<Renderer>();
     [SerializeField]
-    private Shader m_gaussBlurShader;
+    private Shader m_GaussBlurShader;
     [Range(0, 1)]
-    public float BlurSpreadSize;
+    public float m_BlurSpreadSize;
     [Range(5, 20)]
-    public float DistanceFadeSize = 10;
+    //public float DistanceFadeSize = 10;
     [SerializeField]
     private int m_RTSize = 512;
 
@@ -80,7 +80,7 @@ public class TransparentReflection : MonoBehaviour
     #region event
     private void Awake()
     {
-        m_depthMat = new Material(m_gaussBlurShader);
+        m_depthMat = new Material(m_GaussBlurShader);
         m_depthMat.hideFlags = HideFlags.HideAndDontSave;
         reflectionRT = RenderTexture.GetTemporary(m_RTSize, m_RTSize, 24);
         reflectionRender = gameObject.GetComponent<Renderer>();
@@ -103,8 +103,8 @@ public class TransparentReflection : MonoBehaviour
         LinkRenderQueue.Clear();
         ClothRenderQueue_Transparent.Clear();
         ClothRenderQueue.Clear();
-        targetObjectList.Clear();
-        invisibleRenderList.Clear();
+        m_TargetObjectList.Clear();
+        m_InvisibleRenderList.Clear();
         Cleanup();
         DestroyObject(m_depthMat);
         DestroyObject(m_RefMat);
@@ -127,18 +127,18 @@ public class TransparentReflection : MonoBehaviour
     }
     #endregion
 
-    #region 对外接口 
+    #region 对外接口
     /// <summary>
     /// 添加镜像目标
     /// </summary>
     /// <param name="target"></param>
     public void AddTarget(GameObject target)
     {
-        if (targetObjectList.Contains(target))
+        if (m_TargetObjectList.Contains(target))
             return;
 
         else
-            targetObjectList.Add(target);
+            m_TargetObjectList.Add(target);
     }
 
     /// <summary>
@@ -147,11 +147,11 @@ public class TransparentReflection : MonoBehaviour
     /// <param name="target"></param>
     public void RemoveTarget(GameObject target)
     {
-        if (!targetObjectList.Contains(target))
+        if (!m_TargetObjectList.Contains(target))
             return;
 
         else
-            targetObjectList.Remove(target);
+            m_TargetObjectList.Remove(target);
     }
 
     /// <summary>
@@ -160,21 +160,19 @@ public class TransparentReflection : MonoBehaviour
     /// <param name="target"></param>
     public void SetInvisibleObject(GameObject invisibleObject)
     {
-
         Renderer[] invisibleRenderers = invisibleObject.GetComponentsInChildren<Renderer>(true);
         for (int j = 0; j < invisibleRenderers.Length; j++)
         {
-            if (invisibleRenderList.Contains(invisibleRenderers[j]))
+            if (m_InvisibleRenderList.Contains(invisibleRenderers[j]))
                 continue;
             else
-                invisibleRenderList.Add(invisibleRenderers[j]);
+                m_InvisibleRenderList.Add(invisibleRenderers[j]);
         }
 
     }
 
     public void RemoveSelection()
     {
-
         GameObject curObject = GameObject.FindWithTag("ins");
         SetInvisibleObject(curObject);
     }
@@ -190,15 +188,15 @@ public class TransparentReflection : MonoBehaviour
         ClothRenderQueue.Clear();
         SetInvisibleObject(this.gameObject);
 
-        for (int j = 0; j < targetObjectList.Count; j++)
-        {
+        for (int j = 0; j < m_TargetObjectList.Count; j++)
+        {   
 
-            if (targetObjectList[j] == null)
+            if (m_TargetObjectList[j] == null)
                 continue;
 
-            for (int i = 0; i < targetObjectList[j].transform.childCount; i++)
+            for (int i = 0; i < m_TargetObjectList[j].transform.childCount; i++)
             {
-                Transform child = targetObjectList[j].transform.GetChild(i);
+                Transform child = m_TargetObjectList[j].transform.GetChild(i);
 
                 if (child.gameObject.name == "_LinkObjects" || child.gameObject.name == "BPLink")
                 {
@@ -213,12 +211,11 @@ public class TransparentReflection : MonoBehaviour
             RenderObject.SortByRenderQueue(LinkRenderQueue_Transparent);
         if (ClothRenderQueue_Transparent.Count > 1)
             RenderObject.SortByRenderQueue(ClothRenderQueue_Transparent);
-        invisibleRenderList.Clear();
+        m_InvisibleRenderList.Clear();
     }
 
     public void AddSelection()
     {
-
         GameObject curObject = GameObject.FindWithTag("Player");
         AddTarget(curObject);
     }
@@ -337,7 +334,7 @@ public class TransparentReflection : MonoBehaviour
         //Renderer[] targetRenderers = child.gameObject.GetComponentsInChildren<Renderer>(true);
         for (int j = 0; j < targetRenderers.Count; j++)
         {
-            if (invisibleRenderList.Contains(targetRenderers[j]))
+            if (m_InvisibleRenderList.Contains(targetRenderers[j]))
                 continue;
             var Materials = targetRenderers[j].sharedMaterials;
             if (Materials == null)
@@ -347,7 +344,7 @@ public class TransparentReflection : MonoBehaviour
                 if (Materials[i] == null)
                     continue;
                 KeyValuePair<int, Material> temp = new KeyValuePair<int, Material>(i, Materials[i]);
-                //区分透明与非透明
+                // 区分透明与非透明
                 if (Materials[i].renderQueue <= 2500)
                 {
                     RenderObject m_RenderObject = new RenderObject(Materials[i].renderQueue, targetRenderers[j], Materials[i], i);
@@ -402,9 +399,9 @@ public class TransparentReflection : MonoBehaviour
         m_commandBuffer.SetInvertCulling(false);
 
         //模糊
-        if (m_depthMat && BlurSpreadSize > 0)
+        if (m_depthMat && m_BlurSpreadSize > 0)
         {
-            m_depthMat.SetFloat("_DownSampleValue", BlurSpreadSize);
+            m_depthMat.SetFloat("_DownSampleValue", m_BlurSpreadSize);
             m_commandBuffer.GetTemporaryRT(TempRT, reflectionRT.width, reflectionRT.height);
             m_commandBuffer.Blit(reflectionRT, TempRT, m_depthMat, 1);
             m_commandBuffer.Blit(TempRT, reflectionRT, m_depthMat, 2);

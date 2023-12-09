@@ -26,11 +26,10 @@ public class TransparentReflectionEditor : Editor
 
     protected void OnEnable()
     {
-
-        _targetObjectList = serializedObject.FindProperty("targetObjectList");
-        _invisibleRenderList = serializedObject.FindProperty("invisibleRenderList");
-        _blurShader = serializedObject.FindProperty("m_gaussBlurShader");
-        _BlurSpreadSize = serializedObject.FindProperty("BlurSpreadSize");
+        _targetObjectList = serializedObject.FindProperty("m_TargetObjectList");
+        _invisibleRenderList = serializedObject.FindProperty("m_InvisibleRenderList");
+        _blurShader = serializedObject.FindProperty("m_GaussBlurShader");
+        _BlurSpreadSize = serializedObject.FindProperty("m_BlurSpreadSize");
         _RTSize = serializedObject.FindProperty("m_RTSize");
         m_data = target as TransparentReflection;
     }
@@ -43,8 +42,8 @@ public class TransparentReflectionEditor : Editor
         serializedObject.Update();
 
         EditorGUI.BeginChangeCheck();
-        int selectindx = _RTSize.intValue==512 ?0:1;
-        selectindx =EditorGUILayout.Popup("RTSize",selectindx, new string[] { "512", "1024" });
+        int selectindx = _RTSize.intValue == 512 ? 0 : 1;
+        selectindx = EditorGUILayout.Popup("RTSize",selectindx, new string[] { "512", "1024" });
         if(EditorGUI.EndChangeCheck())
         {
             _RTSize.intValue = selectindx == 0 ? 512 : 1024;
