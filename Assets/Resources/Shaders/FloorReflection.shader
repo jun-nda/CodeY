@@ -2,10 +2,8 @@ Shader "DGM/Advanced/FloorReflection"
 {
 	Properties
 	{
-
 		_AlphaScale("透明度", Range(0, 1)) = 1
 		_MainTex("地板贴图",2D) = ""
-
 	}
 
 		SubShader
@@ -14,20 +12,20 @@ Shader "DGM/Advanced/FloorReflection"
 		LOD 200
 		Pass
 		{
-			Tags { "LightMode" = "ForwardBase" }
+			Tags { "LightMode" = "UniversalForward" }
 
 
-			CGPROGRAM
+			HLSLPROGRAM
 
 			#pragma vertex vert
 			#pragma fragment frag
 
-			#include "UnityCG.cginc"
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
 			sampler2D _ReflectionTex;
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
-			fixed _AlphaScale;
+			half _AlphaScale;
 			half _StartPixel;
 			half _Fade;
 
@@ -48,25 +46,24 @@ Shader "DGM/Advanced/FloorReflection"
 			v2f vert(appdata v)
 			{
 				v2f f;
-				f.position = UnityObjectToClipPos(v.vertex);
+				f.position = TransformObjectToHClip(v.vertex);
 				f.screenPos = ComputeScreenPos(f.position);
 				f.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
 				return f;
 			}
 
 
-			fixed4 frag(v2f i) : SV_Target
+			half4 frag(v2f i) : SV_Target
 			{
 				
-				fixed4 textColor = tex2D(_ReflectionTex, i.screenPos.xy / i.screenPos.w);
-				fixed4 color = textColor * saturate(((i.screenPos.xy / i.screenPos.w).y - _StartPixel + 0.5) / 0.5) * _AlphaScale;
+				half textColor = tex2D(_ReflectionTex, i.screenPos.xy / i.screenPos.w);
+				half4 color = textColor * saturate(((i.screenPos.xy / i.screenPos.w).y - _StartPixel + 0.5) / 0.5) * _AlphaScale;
 				color += tex2D(_MainTex, i.uv);
 				color.a = 1;
 				return color;
 			}
-				ENDCG
+				ENDHLSL
 			}
 
 	}
-		CustomEditor "H3DShaderGUI" // Added By H3DShaderGUI
 }
