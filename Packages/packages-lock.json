@@ -109,9 +109,9 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
-      "version": "file:D:/Code/com.unity.render-pipelines.core@14.0.8",
-      "depth": 0,
-      "source": "local",
+      "version": "14.0.8",
+      "depth": 1,
+      "source": "builtin",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.physics": "1.0.0",
