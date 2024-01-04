@@ -11,6 +11,25 @@ public class HexCell : MonoBehaviour
     [SerializeField]
     HexCell[] neighbors;
     
+    public RectTransform uiRect; // 用于cell变化时更改ui位置
+    
+    public int Elevation {
+        get {
+            return elevation;
+        }
+        set {
+            elevation = value;
+            Vector3 position = transform.localPosition;
+            position.y = value * HexMetrics.elevationStep;
+            transform.localPosition = position;
+            
+            Vector3 uiPosition = uiRect.localPosition;
+            uiPosition.z = elevation * -HexMetrics.elevationStep;
+            uiRect.localPosition = uiPosition;
+        }
+    }
+    public int elevation;
+    
     public HexCell GetNeighbor (HexDirection direction) {
         return neighbors[(int)direction];
     }
