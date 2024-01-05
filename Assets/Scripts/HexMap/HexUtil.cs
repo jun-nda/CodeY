@@ -3,6 +3,14 @@ using UnityEngine;
 public enum HexDirection {
     NE, E, SE, SW, W, NW
 }
+
+public enum HexEdgeType
+{
+    Flat,
+    Slope,
+    Cliff
+}
+
 public static class HexDirectionExtensions {
 
     public static HexDirection Opposite (this HexDirection direction) {
@@ -16,7 +24,6 @@ public static class HexDirectionExtensions {
     public static HexDirection Next (this HexDirection direction) {
         return direction == HexDirection.NW ? HexDirection.NE : (direction + 1);
     }
-    
 }
 
 [System.Serializable]
