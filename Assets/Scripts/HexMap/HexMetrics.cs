@@ -22,10 +22,18 @@ public static class HexMetrics {
 	public const float elevationStep = 5f; // 海拔步长，真实游戏中这个值会更小
 	
 	// 海拔阶梯的数量
+	// https://catlikecoding.com/unity/tutorials/hex-map/part-3/terraced-edge-connections/terraces.png
 	public const int terracesPerSlope = 2;
 	public const int terraceSteps = terracesPerSlope * 2 + 1;
 	public const float horizontalTerraceStepSize = 1f / terraceSteps;
 	public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
+	
+	public const float cellPerturbStrength = 5f;
+	
+	public static Texture2D noiseSource;
+	public const float noiseScale = 0.003f;
+	
+	public const float elevationPerturbStrength = 1.5f;
 	
 	public static Vector3 GetFirstCorner (HexDirection direction) {
 		return corners[(int)direction];
@@ -71,5 +79,12 @@ public static class HexMetrics {
 			return HexEdgeType.Slope;
 		}
 		return HexEdgeType.Cliff;
+	}
+	
+	public static Vector4 SampleNoise (Vector3 position) {
+		return noiseSource.GetPixelBilinear(
+			position.x * noiseScale,
+			position.z * noiseScale
+		);
 	}
 }

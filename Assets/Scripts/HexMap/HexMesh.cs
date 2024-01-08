@@ -83,10 +83,11 @@ public class HexMesh : MonoBehaviour {
         // AddQuadColor(cell.color, neighbor.color);
 
         HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
-        if (direction <= HexDirection.E && nextNeighbor != null) {
+        if (direction <= HexDirection.E && nextNeighbor != null) { // 只用绘制前两个方向的，自己画一下会清晰一点
             Vector3 v5 = v2 + HexMetrics.GetBridge(direction.Next());
             v5.y = nextNeighbor.Elevation * HexMetrics.elevationStep;
             
+            // 先把三个六边形按海拔从低到高排列，无他，便于管理逻辑
             if (cell.Elevation <= neighbor.Elevation) {
                 if (cell.Elevation <= nextNeighbor.Elevation) {
                     TriangulateCorner(v2, cell, v4, neighbor, v5, nextNeighbor);
@@ -104,6 +105,8 @@ public class HexMesh : MonoBehaviour {
         }
     }
 
+    // 绘制两个六边形中间的阶梯四边形，对于每个六边形，只需要画前三个方向的
+    // 理论上是可以一个循环解决问题的，现在先不做这种吃力不讨好的事情，只是写法的区别
     void TriangulateEdgeTerraces (
         Vector3 beginLeft, Vector3 beginRight, HexCell beginCell,
         Vector3 endLeft, Vector3 endRight, HexCell endCell
@@ -130,6 +133,7 @@ public class HexMesh : MonoBehaviour {
         AddQuadColor(c2, endCell.color);
     }
     
+    // 绘制六三个六边形中间的三角形，对于每个六边形，只需要画前两个方向的
     void TriangulateCorner (
         Vector3 bottom, HexCell bottomCell,
         Vector3 left, HexCell leftCell,
@@ -144,7 +148,7 @@ public class HexMesh : MonoBehaviour {
                     bottom, bottomCell, left, leftCell, right, rightCell
                 );
             }
-            else if (rightEdgeType == HexEdgeType.Flat) {
+            else if (rightEdgeType == HexEdgeType.Flat) { // 这种情况可以在编辑器里观察一下，三角形是正过来的，所以从高向低画
                 TriangulateCornerTerraces(
                     left, leftCell, right, rightCell, bottom, bottomCell
                 );
@@ -161,7 +165,6 @@ public class HexMesh : MonoBehaviour {
                 TriangulateCornerTerraces(
                     right, rightCell, bottom, bottomCell, left, leftCell
                 );
-                return;
             }
             else {
                 TriangulateCornerCliffTerraces(
@@ -187,6 +190,7 @@ public class HexMesh : MonoBehaviour {
         }
     }
     
+    // https://catlikecoding.com/unity/tutorials/hex-map/part-3/terraced-corner-connections/hole.png
     void TriangulateCornerTerraces (
         Vector3 begin, HexCell beginCell,
         Vector3 left, HexCell leftCell,
@@ -251,6 +255,8 @@ public class HexMesh : MonoBehaviour {
     }
     
     // 左边是悬崖
+    // https://catlikecoding.com/unity/tutorials/hex-map/part-3/merging-slopes-and-cliffs/two-slopes-one-cliff.png
+    // https://catlikecoding.com/unity/tutorials/hex-map/part-3/merging-slopes-and-cliffs/one-slope-two-cliffs.png
     void TriangulateCornerCliffTerraces (
         Vector3 begin, HexCell beginCell,
         Vector3 left, HexCell leftCell,
@@ -316,9 +322,9 @@ public class HexMesh : MonoBehaviour {
     
     void AddTriangle (Vector3 v1, Vector3 v2, Vector3 v3) {
         int vertexIndex = vertices.Count;
-        vertices.Add(v1);
-        vertices.Add(v2);
-        vertices.Add(v3);
+        vertices.Add(Perturb(v1));
+        vertices.Add(Perturb(v2));
+        vertices.Add(Perturb(v3));
         triangles.Add(vertexIndex);
         triangles.Add(vertexIndex + 1);
         triangles.Add(vertexIndex + 2);
@@ -326,10 +332,10 @@ public class HexMesh : MonoBehaviour {
     
     void AddQuad (Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4) {
         int vertexIndex = vertices.Count;
-        vertices.Add(v1);
-        vertices.Add(v2);
-        vertices.Add(v3);
-        vertices.Add(v4);
+        vertices.Add(Perturb(v1));
+        vertices.Add(Perturb(v2));
+        vertices.Add(Perturb(v3));
+        vertices.Add(Perturb(v4));
         triangles.Add(vertexIndex);
         triangles.Add(vertexIndex + 2);
         triangles.Add(vertexIndex + 1);
@@ -350,4 +356,13 @@ public class HexMesh : MonoBehaviour {
         colors.Add(c2);
         colors.Add(c2);
     }
+    
+    Vector3 Perturb (Vector3 position) {
+        Vector4 sample = HexMetrics.SampleNoise(position);
+        position.x += (sample.x * 2f - 1f) * HexMetrics.cellPerturbStrength;
+        // position.y += (sample.y * 2f - 1f) * HexMetrics.cellPerturbStrength;
+        position.z += (sample.z * 2f - 1f) * HexMetrics.cellPerturbStrength;
+        return position;
+    }
+    
 }
