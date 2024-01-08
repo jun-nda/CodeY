@@ -33,6 +33,12 @@ public class HexCell : MonoBehaviour
     }
     public int elevation;
     
+    public Vector3 Position {
+        get {
+            return transform.localPosition;
+        }
+    }
+    
     public HexCell GetNeighbor (HexDirection direction) {
         return neighbors[(int)direction];
     }
