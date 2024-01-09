@@ -6,7 +6,7 @@ public static class HexMetrics {
 	public const float innerRadius = outerRadius * 0.866025404f;
 	
 	// 控制混合区域
-	public const float solidFactor = 0.75f;
+	public const float solidFactor = 0.8f;
 	public const float blendFactor = 1f - solidFactor;
 	
 	private static Vector3[] corners = {
@@ -19,7 +19,7 @@ public static class HexMetrics {
 		new Vector3(0f, 0f, outerRadius)
 	};
 	
-	public const float elevationStep = 5f; // 海拔步长，真实游戏中这个值会更小
+	public const float elevationStep = 3f; // 海拔步长，真实游戏中这个值会更小
 	
 	// 海拔阶梯的数量
 	// https://catlikecoding.com/unity/tutorials/hex-map/part-3/terraced-edge-connections/terraces.png
@@ -28,7 +28,7 @@ public static class HexMetrics {
 	public const float horizontalTerraceStepSize = 1f / terraceSteps;
 	public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
 	
-	public const float cellPerturbStrength = 5f;
+	public const float cellPerturbStrength = 4f;
 	
 	public static Texture2D noiseSource;
 	public const float noiseScale = 0.003f;

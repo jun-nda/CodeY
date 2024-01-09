@@ -45,19 +45,20 @@ public class HexMesh : MonoBehaviour {
     void Triangulate(HexDirection direction, HexCell cell)
     {
         Vector3 center = cell.Position;
-        Vector3 v1 = center + HexMetrics.GetFirstSolidCorner(direction);
-        Vector3 v2 = center + HexMetrics.GetSecondSolidCorner(direction);
+        EdgeVertices e = new EdgeVertices(
+            center + HexMetrics.GetFirstSolidCorner(direction),
+            center + HexMetrics.GetSecondSolidCorner(direction)
+        );
         
-        AddTriangle(center, v1, v2);
-        AddTriangleColor(cell.color);
+        TriangulateEdgeFan(center, e, cell.color);
 
         if (direction <= HexDirection.SE) { // 前三个方向
-            TriangulateConnection(direction, cell, v1, v2);
+            TriangulateConnection(direction, cell, e);
         }
     }
 
     void TriangulateConnection(
-        HexDirection direction, HexCell cell, Vector3 v1, Vector3 v2
+        HexDirection direction, HexCell cell,EdgeVertices e1
     )
     {
         HexCell neighbor = cell.GetNeighbor(direction);
@@ -65,42 +66,43 @@ public class HexMesh : MonoBehaviour {
             return;
         }
         Vector3 bridge = HexMetrics.GetBridge(direction);
-        Vector3 v3 = v1 + bridge;
-        Vector3 v4 = v2 + bridge;
-        
-        v3.y = v4.y = neighbor.Position.y;
+        bridge.y = neighbor.Position.y - cell.Position.y;
+        EdgeVertices e2 = new EdgeVertices( // 矩形的远离六边形的那条边
+            e1.v1 + bridge,
+            e1.v4 + bridge
+        );
 
         if (cell.GetEdgeType(direction) == HexEdgeType.Slope)
         {
-            TriangulateEdgeTerraces(v1, v2, cell, v3, v4, neighbor);
+            TriangulateEdgeTerraces(e1, cell, e2, neighbor); // 梯田
         }
         else {
-            AddQuad(v1, v2, v3, v4);
-            AddQuadColor(cell.color, neighbor.color);
+            TriangulateEdgeStrip(e1, cell.color, e2, neighbor.color); // 条状
         }
         
         // AddQuad(v1, v2, v3, v4);
         // AddQuadColor(cell.color, neighbor.color);
 
+        // 这部分是三个六边形中间的三角形的逻辑
         HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
         if (direction <= HexDirection.E && nextNeighbor != null) { // 只用绘制前两个方向的，自己画一下会清晰一点
-            Vector3 v5 = v2 + HexMetrics.GetBridge(direction.Next());
+            Vector3 v5 = e1.v4 + HexMetrics.GetBridge(direction.Next());
             v5.y = nextNeighbor.Position.y;
             
             // 先把三个六边形按海拔从低到高排列，无他，便于管理逻辑
             if (cell.Elevation <= neighbor.Elevation) {
                 if (cell.Elevation <= nextNeighbor.Elevation) {
-                    TriangulateCorner(v2, cell, v4, neighbor, v5, nextNeighbor);
+                    TriangulateCorner(e1.v4, cell, e2.v4, neighbor, v5, nextNeighbor);
                 }
                 else {
-                    TriangulateCorner(v5, nextNeighbor, v2, cell, v4, neighbor);
+                    TriangulateCorner(v5, nextNeighbor, e1.v4, cell, e2.v4, neighbor);
                 }
             }
             else if (neighbor.Elevation <= nextNeighbor.Elevation) {
-                TriangulateCorner(v4, neighbor, v5, nextNeighbor, v2, cell);
+                TriangulateCorner(e2.v4, neighbor, v5, nextNeighbor, e1.v4, cell);
             }
             else {
-                TriangulateCorner(v5, nextNeighbor, v2, cell, v4, neighbor);
+                TriangulateCorner(v5, nextNeighbor, e1.v4, cell, e2.v4, neighbor);
             }
         }
     }
@@ -108,32 +110,27 @@ public class HexMesh : MonoBehaviour {
     // 绘制两个六边形中间的阶梯四边形，对于每个六边形，只需要画前三个方向的
     // 理论上是可以一个循环解决问题的，现在先不做这种吃力不讨好的事情，只是写法的区别
     void TriangulateEdgeTerraces (
-        Vector3 beginLeft, Vector3 beginRight, HexCell beginCell,
-        Vector3 endLeft, Vector3 endRight, HexCell endCell
+        EdgeVertices begin, HexCell beginCell,
+        EdgeVertices end, HexCell endCell
     ) {
-        Vector3 v3 = HexMetrics.TerraceLerp(beginLeft, endLeft, 1);
-        Vector3 v4 = HexMetrics.TerraceLerp(beginRight, endRight, 1);
+        EdgeVertices e2 = EdgeVertices.TerraceLerp(begin, end, 1);
         Color c2 = HexMetrics.TerraceLerp(beginCell.color, endCell.color, 1);
-        
-        AddQuad(beginLeft, beginRight, v3, v4);
-        AddQuadColor(beginCell.color, c2);
-        
+
+        TriangulateEdgeStrip(begin, beginCell.color, e2, c2);
+
         for (int i = 2; i < HexMetrics.terraceSteps; i++) {
-            Vector3 v1 = v3;
-            Vector3 v2 = v4;
+            EdgeVertices e1 = e2;
             Color c1 = c2;
-            v3 = HexMetrics.TerraceLerp(beginLeft, endLeft, i);
-            v4 = HexMetrics.TerraceLerp(beginRight, endRight, i);
+            e2 = EdgeVertices.TerraceLerp(begin, end, i);
             c2 = HexMetrics.TerraceLerp(beginCell.color, endCell.color, i);
-            AddQuad(v1, v2, v3, v4);
-            AddQuadColor(c1, c2);
+            TriangulateEdgeStrip(e1, c1, e2, c2);
         }
-        
-        AddQuad(v3, v4, endLeft, endRight);
-        AddQuadColor(c2, endCell.color);
+
+        TriangulateEdgeStrip(e2, c2, end, endCell.color);
     }
     
     // 绘制六三个六边形中间的三角形，对于每个六边形，只需要画前两个方向的
+    // 这里有很多种情况分类，需要思路清晰
     void TriangulateCorner (
         Vector3 bottom, HexCell bottomCell,
         Vector3 left, HexCell leftCell,
@@ -152,7 +149,6 @@ public class HexMesh : MonoBehaviour {
                 TriangulateCornerTerraces(
                     left, leftCell, right, rightCell, bottom, bottomCell
                 );
-                return;
             }
             else {
                 TriangulateCornerTerracesCliff(
@@ -231,12 +227,8 @@ public class HexMesh : MonoBehaviour {
         if (b < 0) {
             b = -b;
         }
-        Vector3 boundary = Vector3.Lerp(begin, right, b);
+        Vector3 boundary = Vector3.Lerp(Perturb(begin), Perturb(right), b);
         Color boundaryColor = Color.Lerp(beginCell.color, rightCell.color, b);
-        
-        Vector3 v2 = HexMetrics.TerraceLerp(begin, left, 1);
-        Color c2 = HexMetrics.TerraceLerp(beginCell.color, leftCell.color, 1);
-        
         
         TriangulateBoundaryTriangle(
             begin, beginCell, left, leftCell, boundary, boundaryColor
@@ -248,7 +240,7 @@ public class HexMesh : MonoBehaviour {
             );
         }
         else {
-            AddTriangle(left, right, boundary);
+            AddTriangleUnperturbed(Perturb(left), Perturb(right), boundary);
             AddTriangleColor(leftCell.color, rightCell.color, boundaryColor);
         }
         
@@ -266,7 +258,7 @@ public class HexMesh : MonoBehaviour {
         if (b < 0) {
             b = -b;
         }
-        Vector3 boundary = Vector3.Lerp(begin, left, b);
+        Vector3 boundary = Vector3.Lerp(Perturb(begin), Perturb(left), b);
         Color boundaryColor = Color.Lerp(beginCell.color, leftCell.color, b);
 
         TriangulateBoundaryTriangle(
@@ -279,7 +271,7 @@ public class HexMesh : MonoBehaviour {
             );
         }
         else {
-            AddTriangle(left, right, boundary);
+            AddTriangleUnperturbed(Perturb(left), Perturb(right), boundary);
             AddTriangleColor(leftCell.color, rightCell.color, boundaryColor);
         }
     }
@@ -289,23 +281,57 @@ public class HexMesh : MonoBehaviour {
         Vector3 left, HexCell leftCell,
         Vector3 boundary, Color boundaryColor
     ) {
-        Vector3 v2 = HexMetrics.TerraceLerp(begin, left, 1);
+        Vector3 v2 = Perturb(HexMetrics.TerraceLerp(begin, left, 1));
         Color c2 = HexMetrics.TerraceLerp(beginCell.color, leftCell.color, 1);
 
-        AddTriangle(begin, v2, boundary);
+        // boundary不进行柏林扰动
+        // https://catlikecoding.com/unity/tutorials/hex-map/part-4/reconnecting-cliffs-and-terraces/holes.png
+        AddTriangleUnperturbed(Perturb(begin), v2, boundary); 
         AddTriangleColor(beginCell.color, c2, boundaryColor);
 
         for (int i = 2; i < HexMetrics.terraceSteps; i++) {
             Vector3 v1 = v2;
             Color c1 = c2;
-            v2 = HexMetrics.TerraceLerp(begin, left, i);
+            v2 = Perturb(HexMetrics.TerraceLerp(begin, left, i));
             c2 = HexMetrics.TerraceLerp(beginCell.color, leftCell.color, i);
-            AddTriangle(v1, v2, boundary);
+            AddTriangleUnperturbed(v1, v2, boundary);
             AddTriangleColor(c1, c2, boundaryColor);
         }
 
-        AddTriangle(v2, left, boundary);
+        AddTriangleUnperturbed(v2, Perturb(left), boundary);
         AddTriangleColor(c2, leftCell.color, boundaryColor);
+    }
+    
+    void TriangulateEdgeFan (Vector3 center, EdgeVertices edge, Color color) {
+        AddTriangle(center, edge.v1, edge.v2);
+        AddTriangleColor(color);
+        AddTriangle(center, edge.v2, edge.v3);
+        AddTriangleColor(color);
+        AddTriangle(center, edge.v3, edge.v4);
+        AddTriangleColor(color);
+    }
+    
+    void TriangulateEdgeStrip (
+        EdgeVertices e1, Color c1,
+        EdgeVertices e2, Color c2
+    ) {
+        AddQuad(e1.v1, e1.v2, e2.v1, e2.v2);
+        AddQuadColor(c1, c2);
+        AddQuad(e1.v2, e1.v3, e2.v2, e2.v3);
+        AddQuadColor(c1, c2);
+        AddQuad(e1.v3, e1.v4, e2.v3, e2.v4);
+        AddQuadColor(c1, c2);
+    }
+    
+    // Reconnecting Cliffs and Terraces
+    void AddTriangleUnperturbed (Vector3 v1, Vector3 v2, Vector3 v3) {
+        int vertexIndex = vertices.Count;
+        vertices.Add(v1);
+        vertices.Add(v2);
+        vertices.Add(v3);
+        triangles.Add(vertexIndex);
+        triangles.Add(vertexIndex + 1);
+        triangles.Add(vertexIndex + 2);
     }
     
     void AddTriangleColor (Color color) {
