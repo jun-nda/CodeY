@@ -66,7 +66,7 @@ public class HexGrid : MonoBehaviour
         // cell.transform.SetParent(transform, false);
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
-        cell.color = defaultColor;
+        cell.Color = defaultColor;
         
         // 记录邻居信息
         if (x > 0) {
@@ -119,4 +119,21 @@ public class HexGrid : MonoBehaviour
         return cells[index];
     }
     
+    public HexCell GetCell (HexCoordinates coordinates) {
+        int z = coordinates.Z;
+        if (z < 0 || z >= cellCountZ) {
+            return null;
+        }
+        int x = coordinates.X + z / 2;
+        if (x < 0 || x >= cellCountX) {
+            return null;
+        }
+        return cells[x + z * cellCountX];
+    }
+ 
+    public void ShowUI (bool visible) {
+        for (int i = 0; i < chunks.Length; i++) {
+            chunks[i].ShowUI(visible);
+        }
+    }
 }
